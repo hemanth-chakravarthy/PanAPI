@@ -91,6 +91,17 @@ export default function Index() {
             Go to Bank Verification
           </Text>
         </TouchableOpacity>
+        
+
+      </Link>
+      <Link href='/Business_details/aadhaarVerication' asChild>
+      <TouchableOpacity style = {{
+          backgroundColor:'powderblue',
+          padding:25,
+          borderRadius:5.
+        }}>
+          <Text>Go to aadhaar Details</Text>
+        </TouchableOpacity>
       </Link>
     </View>
   );
