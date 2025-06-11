@@ -153,6 +153,7 @@ export default function Index() {
 
 <<<<<<< HEAD
       </Link>
+<<<<<<< HEAD
       <Link href='/Business_details/aadhaarVerication' asChild>
       <TouchableOpacity style = {{
           backgroundColor:'powderblue',
@@ -177,11 +178,19 @@ export default function Index() {
         <TouchableOpacity
           style={{
             backgroundColor: "#007bff",
+=======
+
+      <Link href="/Business_details/BankVerificationBusiness" asChild>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#28a745",
+>>>>>>> origin/Prasad
             padding: 15,
             borderRadius: 5,
           }}
         >
           <Text style={{ color: "white", fontWeight: "bold" }}>
+<<<<<<< HEAD
             Fssai Details
           </Text>
         </TouchableOpacity>
@@ -209,12 +218,19 @@ export default function Index() {
         >
           <Text style={{ color: "white", fontWeight: "bold" }}>
             Vendor GST Details
+=======
+            Go to Seller Bank Verification
+>>>>>>> origin/Prasad
           </Text>
         </TouchableOpacity>
       </Link>
 
+<<<<<<< HEAD
     
     
+=======
+      
+>>>>>>> origin/Prasad
     </View>
   );
 }

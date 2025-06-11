@@ -4,12 +4,15 @@ import { Ionicons } from '@expo/vector-icons';
 
 export default function BankVerificationScreen() {
   const [isVerified, setIsVerified] = useState(false);
-  const [bankAccountNumber, setBankAccountNumber] = useState('9911223344464444');
-  const [ifscCode, setIfscCode] = useState('9911223344464444');
-
+  const [bankAccountNumber, setBankAccountNumber] = useState('30123456789012');
+  const [ifscCode, setIfscCode] = useState('SBIN0001234');
+   const [error, setError] = useState('');
+  
   const handleVerification = () => {
+   
     // Simulate verification process
-    setIsVerified(true);
+      setIsVerified(true);
+
   };
 
   const handleProceed = () => {
@@ -20,8 +23,8 @@ export default function BankVerificationScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-      
-      {/* Header */}
+
+
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#000" />
@@ -30,11 +33,10 @@ export default function BankVerificationScreen() {
         <View style={styles.placeholder} />
       </View>
 
-      {/* Content */}
+
       <View style={styles.content}>
         <Text style={styles.sectionTitle}>Bank Details</Text>
 
-        {/* Bank Account Number */}
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Bank account number</Text>
           <TextInput
@@ -46,7 +48,7 @@ export default function BankVerificationScreen() {
           />
         </View>
 
-        {/* IFSC Code */}
+
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>IFSC code</Text>
           <TextInput
@@ -55,48 +57,49 @@ export default function BankVerificationScreen() {
             onChangeText={setIfscCode}
             placeholder="Enter IFSC code"
             autoCapitalize="characters"
+            
           />
         </View>
 
-        {/* Verify Button */}
-        <TouchableOpacity 
+        {/* verification button */}
+        <TouchableOpacity
           style={styles.verifyButton}
           onPress={handleVerification}
         >
           <Text style={styles.verifyButtonText}>Verify bank details</Text>
         </TouchableOpacity>
 
-        {/* Verification Details - Only shown after verification */}
+
         {isVerified && (
           <View style={styles.verificationDetails}>
             <Text style={styles.detailRow}>
               <Text style={styles.detailLabel}>Holder Name : </Text>
-              <Text style={styles.detailValue}>raghavendra reddy</Text>
+              <Text style={styles.detailValue}>Raghavendra Reddy</Text>
             </Text>
-            
+
             <Text style={styles.detailRow}>
               <Text style={styles.detailLabel}>Bank : </Text>
               <Text style={styles.detailValue}>State Bank of India</Text>
             </Text>
-            
+
             <Text style={styles.detailRow}>
               <Text style={styles.detailLabel}>Account number : </Text>
-              <Text style={styles.detailValue}>99999999999</Text>
+              <Text style={styles.detailValue}>30123456789012</Text>
             </Text>
-            
+
             <Text style={styles.detailRow}>
               <Text style={styles.detailLabel}>Ifsc code : </Text>
-              <Text style={styles.detailValue}>123456789999</Text>
+              <Text style={styles.detailValue}>SBIN0001234</Text>
             </Text>
-            
+
             <Text style={styles.detailRow}>
               <Text style={styles.detailLabel}>City : </Text>
               <Text style={styles.detailValue}>Hyderabad</Text>
             </Text>
-            
+
             <Text style={styles.detailRow}>
               <Text style={styles.detailLabel}>Branch : </Text>
-              <Text style={styles.detailValue}>kukatpally</Text>
+              <Text style={styles.detailValue}>Kukatpally</Text>
             </Text>
 
             {/* Checkbox */}
@@ -110,9 +113,9 @@ export default function BankVerificationScreen() {
         )}
       </View>
 
-      {/* Bottom Button */}
+      {/* Proceed to next Button */}
       <View style={styles.bottomContainer}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.proceedButton, isVerified ? styles.proceedButtonActive : styles.proceedButtonInactive]}
           onPress={handleProceed}
           disabled={!isVerified}
@@ -166,8 +169,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   inputLabel: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: 15,
+    color: '#333',
     marginBottom: 8,
   },
   textInput: {
