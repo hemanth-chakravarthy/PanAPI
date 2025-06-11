@@ -92,6 +92,22 @@ export default function Index() {
           </Text>
         </TouchableOpacity>
       </Link>
+
+      <Link href="/Business_details/BankVerificationBusiness" asChild>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#28a745",
+            padding: 15,
+            borderRadius: 5,
+          }}
+        >
+          <Text style={{ color: "white", fontWeight: "bold" }}>
+            Go to Seller Bank Verification
+          </Text>
+        </TouchableOpacity>
+      </Link>
+
+      
     </View>
   );
 }
