@@ -103,6 +103,19 @@ export default function Index() {
           <Text>Go to aadhaar Details</Text>
         </TouchableOpacity>
       </Link>
+      <Link href="/Business_details/pan-details" asChild>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#28a745",
+            padding: 15,
+            borderRadius: 5,
+          }}
+        >
+          <Text style={{ color: "white", fontWeight: "bold" }}>
+            Go to PAN Verification
+          </Text>
+        </TouchableOpacity>
+      </Link>
     </View>
   );
 }
