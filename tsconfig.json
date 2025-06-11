@@ -1,11 +1,15 @@
 {
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    // ...other options
+  },
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     }
   },
   "include": [
