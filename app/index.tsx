@@ -151,9 +151,19 @@ export default function Index() {
         </TouchableOpacity>
         
 
-<<<<<<< HEAD
+
       </Link>
-<<<<<<< HEAD
+
+      {/* <Link href='/Business_details/aadhaarVerication' asChild>
+      <TouchableOpacity style = {{
+          backgroundColor:'powderblue',
+          padding:25,
+          borderRadius:5.
+        }}>
+          <Text>Go to aadhaar Details</Text>
+        </TouchableOpacity>
+
+      </Link> */}
       <Link href='/Business_details/aadhaarVerication' asChild>
       <TouchableOpacity style = {{
           backgroundColor:'powderblue',
@@ -162,75 +172,7 @@ export default function Index() {
         }}>
           <Text>Go to aadhaar Details</Text>
         </TouchableOpacity>
-=======
->>>>>>> origin/Maheeth
       </Link>
-      <Link href='/Business_details/aadhaarVerication' asChild>
-      <TouchableOpacity style = {{
-          backgroundColor:'powderblue',
-          padding:25,
-          borderRadius:5.
-        }}>
-          <Text>Go to aadhaar Details</Text>
-        </TouchableOpacity>
-      </Link>
-      <Link href="/Business_details/fssai" asChild>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#007bff",
-=======
-
-      <Link href="/Business_details/BankVerificationBusiness" asChild>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#28a745",
->>>>>>> origin/Prasad
-            padding: 15,
-            borderRadius: 5,
-          }}
-        >
-          <Text style={{ color: "white", fontWeight: "bold" }}>
-<<<<<<< HEAD
-            Fssai Details
-          </Text>
-        </TouchableOpacity>
-      </Link>
-      <Link href="/Business_details/company-gst" asChild>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#007bff",
-            padding: 15,
-            borderRadius: 5,
-          }}
-        >
-          <Text style={{ color: "white", fontWeight: "bold" }}>
-            Company GST Details
-          </Text>
-        </TouchableOpacity>
-      </Link>
-      <Link href="/Business_details/vendor-gst" asChild>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#007bff",
-            padding: 15,
-            borderRadius: 5,
-          }}
-        >
-          <Text style={{ color: "white", fontWeight: "bold" }}>
-            Vendor GST Details
-=======
-            Go to Seller Bank Verification
->>>>>>> origin/Prasad
-          </Text>
-        </TouchableOpacity>
-      </Link>
-
-<<<<<<< HEAD
-    
-    
-=======
-      
->>>>>>> origin/Prasad
     </View>
   );
 }
