@@ -174,7 +174,7 @@ export default function Index() {
           </Text>
         </TouchableOpacity>
       </Link>
-      <Link href="/Business_details/fssai" asChild>
+      <Link href="/Business_details/company-gst" asChild>
         <TouchableOpacity
           style={{
             backgroundColor: "#007bff",
