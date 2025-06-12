@@ -171,21 +171,9 @@ export default function Index() {
 
       </Link>
 
-      <Link href='/Business_details/aadhaarVerication' asChild>
-        <TouchableOpacity 
-          style={{
-            backgroundColor: 'powderblue',
-            padding: 15,
-            borderRadius: 5,
-          }}
-        >
-          <Text style={{ color: "black", fontWeight: "bold" }}>
-            Go to Aadhaar Details
-          </Text>
-        </TouchableOpacity>
+      
 
-      </Link> */}
-      </Link>
+      {/* </Link> */}
 
       <Link href='/Business_details/aadhaarVerication' asChild>
         <TouchableOpacity 
