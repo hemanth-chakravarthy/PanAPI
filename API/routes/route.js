@@ -27,4 +27,6 @@ router.post('/upload', upload, (req, res) => {
   res.send('File Uploaded');
 });
 
+router.post('/gst/', controller.gstVerification);
+
 module.exports = router;
