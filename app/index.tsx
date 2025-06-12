@@ -173,6 +173,46 @@ export default function Index() {
           <Text>Go to aadhaar Details</Text>
         </TouchableOpacity>
       </Link>
+
+      <Link href='/Business_details/company-gst' asChild>
+      <TouchableOpacity style = {{
+          backgroundColor:'powderblue',
+          padding:25,
+          borderRadius:5.
+        }}>
+          <Text>Comapny gst</Text>
+        </TouchableOpacity>
+      </Link>
+      <Link href='/Business_details/fssai' asChild>
+      <TouchableOpacity style = {{
+          backgroundColor:'powderblue',
+          padding:25,
+          borderRadius:5.
+        }}>
+          <Text>fssai Details</Text>
+        </TouchableOpacity>
+      </Link>
+
+
+      <Link href='/Business_details/pan-details' asChild>
+      <TouchableOpacity style = {{
+          backgroundColor:'powderblue',
+          padding:25,
+          borderRadius:5.
+        }}>
+          <Text>pan Details</Text>
+        </TouchableOpacity>
+      </Link>
+
+<Link href='/Business_details/vendor-gst' asChild>
+      <TouchableOpacity style = {{
+          backgroundColor:'powderblue',
+          padding:25,
+          borderRadius:5.
+        }}>
+          <Text>vendor gst Details</Text>
+        </TouchableOpacity>
+      </Link>
     </View>
   );
 }
