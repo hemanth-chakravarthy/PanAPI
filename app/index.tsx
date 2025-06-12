@@ -103,6 +103,25 @@ export default function Index() {
           <Text>Go to aadhaar Details</Text>
         </TouchableOpacity>
       </Link>
+
+
+        <Link href="/company/fssaii" asChild>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#28a745",
+            padding: 15,
+            borderRadius: 5,
+          }}
+        >
+          <Text style={{ color: "white", fontWeight: "bold" }}>
+            Fssai Details
+          </Text>
+        </TouchableOpacity>
+        
+
+      </Link>
+
+
     </View>
   );
 }
