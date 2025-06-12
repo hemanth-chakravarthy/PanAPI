@@ -129,10 +129,26 @@ export default function Index() {
             backgroundColor: "#007bff",
             padding: 15,
             borderRadius: 5,
+            marginBottom: 10,
           }}
         >
           <Text style={{ color: "white", fontWeight: "bold" }}>
             Go to Seller Registration
+          </Text>
+        </TouchableOpacity>
+      </Link>
+
+      <Link href="/Business_details/BusinessDetails" asChild>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#6c5ce7",
+            padding: 15,
+            borderRadius: 5,
+            marginBottom: 10,
+          }}
+        >
+          <Text style={{ color: "white", fontWeight: "bold" }}>
+            Go to Business Details
           </Text>
         </TouchableOpacity>
       </Link>
@@ -143,6 +159,7 @@ export default function Index() {
             backgroundColor: "#28a745",
             padding: 15,
             borderRadius: 5,
+            marginBottom: 10,
           }}
         >
           <Text style={{ color: "white", fontWeight: "bold" }}>
@@ -154,23 +171,33 @@ export default function Index() {
 
       </Link>
 
-      {/* <Link href='/Business_details/aadhaarVerication' asChild>
-      <TouchableOpacity style = {{
-          backgroundColor:'powderblue',
-          padding:25,
-          borderRadius:5.
-        }}>
-          <Text>Go to aadhaar Details</Text>
+      <Link href='/Business_details/aadhaarVerication' asChild>
+        <TouchableOpacity 
+          style={{
+            backgroundColor: 'powderblue',
+            padding: 15,
+            borderRadius: 5,
+          }}
+        >
+          <Text style={{ color: "black", fontWeight: "bold" }}>
+            Go to Aadhaar Details
+          </Text>
         </TouchableOpacity>
 
       </Link> */}
+      </Link>
+
       <Link href='/Business_details/aadhaarVerication' asChild>
-      <TouchableOpacity style = {{
-          backgroundColor:'powderblue',
-          padding:25,
-          borderRadius:5.
-        }}>
-          <Text>Go to aadhaar Details</Text>
+        <TouchableOpacity 
+          style={{
+            backgroundColor: 'powderblue',
+            padding: 15,
+            borderRadius: 5,
+          }}
+        >
+          <Text style={{ color: "black", fontWeight: "bold" }}>
+            Go to Aadhaar Details
+          </Text>
         </TouchableOpacity>
       </Link>
 
