@@ -130,6 +130,8 @@ export default function Index() {
             Company Details
           </Text>
         </TouchableOpacity>
+        
+
       </Link>
       <Link href="/company/Step2" asChild>
         <TouchableOpacity
