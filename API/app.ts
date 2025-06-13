@@ -1,11 +1,13 @@
-require('dotenv').config(); 
-const express = require('express');
-const cors = require('cors');
-const app = express();
-const db = require('./config/db'); 
-const route = require('./routes/route');
+import dotenv from 'dotenv';
+import express, {Request, Response} from 'express';
+import cors from 'cors';
+import db from './config/db';
+import route from './routes/route';
 
 db();
+dotenv.config();
+
+const app = express();
 
 app.use(cors({
   origin: 'http://localhost:3000' 
@@ -14,7 +16,7 @@ app.use(cors({
 // Parsing middleware
 app.use(express.json());
 app.use('/api', route);
-app.get('/api/test', (req, res) => {
+app.get('/api/test', (req: Request, res: Response) => {
   res.json({ message: 'This is a test' });
 });
 

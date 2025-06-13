@@ -1,6 +1,6 @@
-const axios = require('axios');
+import axios from 'axios';
 
-exports.verifyGstinWithCashfree = async (gstin) => {
+exports.verifyGstinWithCashfree = async (gstin: string): Promise<any> => {
   const response = await axios.post(
     'https://api.cashfree.com/verification/v1/gstin',
     { gstin },

@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import mongoose, {Schema} from 'mongoose';
 
-const GSTDetailsSchema = new mongoose.Schema({
+const GSTDetailsSchema = new Schema({
     referenceId: Number,
     gstin: String,
     legalName: String,
@@ -50,4 +50,5 @@ const GSTDetailsSchema = new mongoose.Schema({
     });
 
 
-module.exports = mongoose.model('GSTDetails', GSTDetailsSchema);
+const GSTDetails = mongoose.model('GSTDetails', GSTDetailsSchema);
+export default GSTDetails;

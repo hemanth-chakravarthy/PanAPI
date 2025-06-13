@@ -1,4 +1,24 @@
-exports.formatGstDetails = (data) => ({
+type RawGstData = {
+  reference_id: number;
+  GSTIN: string;
+  legal_name_of_business: string;
+  trade_name_of_business: string;
+  center_jurisdiction: string;
+  state_jurisdiction: string;
+  date_of_registration: string;
+  constitution_of_business: string;
+  taxpayer_type: string;
+  gst_in_status: string;
+  last_update_date: string;
+  nature_of_business_activities: string[];
+  principal_place_address: string;
+  principal_place_split_address: object;
+  additional_address_array: object[];
+  valid: boolean;
+  message: string;
+};
+
+export const formatGstDetails = (data: RawGstData) => ({
   referenceId: data.reference_id,
   gstin: data.GSTIN,
   legalName: data.legal_name_of_business,
@@ -15,5 +35,5 @@ exports.formatGstDetails = (data) => ({
   principalSplitAddress: data.principal_place_split_address,
   additionalAddresses: data.additional_address_array,
   valid: data.valid,
-  message: data.message
+  message: data.message,
 });
