@@ -228,6 +228,7 @@ export default function Index() {
           <Text>vendor gst Details</Text>
         </TouchableOpacity>
       </Link>
+      
     </View>
   );
 }
