@@ -2,10 +2,10 @@
   "name": "api",
   "version": "1.0.0",
   "description": "",
-  "main": "app.ts",
+  "main": "server.ts",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only app.ts",
-    "start": "ts-node app.ts",
+    "dev": "ts-node-dev --respawn --transpile-only server.ts",
+    "start": "ts-node server.ts",
     "type-check": "tsc --noEmit",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
