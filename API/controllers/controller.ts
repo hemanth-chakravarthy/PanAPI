@@ -1,14 +1,13 @@
 import { Request, Response } from 'express';
-const verifyGstinWithCashfree = require('../services/verifygstService')
-const { formatGstDetails } = require('../utils/gstFormatter');
-const GSTDetails = require('../models/GSTDetails'); 
+import { verifyGstinWithCashfree } from '../services/verifygstService';
+import { formatGstDetails } from '../utils/gstFormatter';
+import GSTDetails from '../models/GSTDetails';
 
-// GST Verification
 export const gstVerification = async (req: Request, res: Response): Promise <void> => {
   const { gstin }= req.body;
 
   try {
-    let gstData = await GSTDetails.findOne({ gstin });
+    const gstData = await GSTDetails.findOne({ gstin });
     if (gstData) {
       console.log('GSTIN found in database:', gstData);
       res.status(200).json({
@@ -18,8 +17,8 @@ export const gstVerification = async (req: Request, res: Response): Promise <voi
       return;
     }
 
-    gstData = await verifyGstinWithCashfree(gstin);
-    const formattedData = formatGstDetails(gstData);
+    const externalGstData = await verifyGstinWithCashfree(gstin);
+    const formattedData = formatGstDetails(externalGstData);
     const gstDocument = new GSTDetails(formattedData);
     await gstDocument.save();
 

@@ -1,17 +1,37 @@
 import axios from 'axios';
 
-exports.verifyGstinWithCashfree = async (gstin: string): Promise<any> => {
-  const response = await axios.post(
-    'https://api.cashfree.com/verification/v1/gstin',
-    { gstin },
-    {
-      headers: {
-        'x-client-id': process.env.CASHFREE_CLIENT_ID,
-        'x-client-secret': process.env.CASHFREE_CLIENT_SECRET,
-        'Content-Type': 'application/json'
-      }
-    }
-  );
+/**
+ * Verifies the GSTIN using Cashfree's API.
+ * @param gstin - The GSTIN number to be verified.
+ * @returns The verification data returned by Cashfree.
+ */ 
+export const verifyGstinWithCashfree = async (gstin: string): Promise<any> => {
+  try {
+    const payloadObj = {
+      GSTIN: gstin,
+      business_name: ''
+    };
 
-  return response.data;
+    const payload = JSON.stringify(payloadObj);
+    const clientId = process.env.CASHFREE_CLIENT_ID!;
+    const clientSecret = process.env.CASHFREE_CLIENT_SECRET!;
+
+    const response = await axios.post(
+      'https://sandbox.cashfree.com/verification/gstin',
+      payload,
+      {
+        headers: {
+          'x-client-id': clientId,
+          'x-client-secret': clientSecret,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      `Error while verifying GSTIN with Cashfree: ${(error as Error).message}`
+    );
+  }
 };

@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "main": "app.ts",
   "scripts": {
-    "start": "ts-node app.ts"
+    "dev": "ts-node-dev --respawn --transpile-only app.ts",
+    "start": "ts-node app.ts",
+    "type-check": "tsc --noEmit",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +25,7 @@
     "@types/mongoose": "^5.11.96",
     "@types/node": "^24.0.1",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
   }
 }
