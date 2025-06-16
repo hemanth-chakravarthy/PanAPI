@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRouter } from 'expo-router';
 import {
   View,
   Text,
@@ -34,7 +35,7 @@ export default function StoreDetails() {
   const [logo, setLogo] = useState<string | null>(null);
   const [banner, setBanner] = useState<string | null>(null);
   const [selfie, setSelfie] = useState<string | null>(null);
-
+const router = useRouter();
   const pickImage = async (setImage: (uri: string) => void) => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -164,11 +165,17 @@ export default function StoreDetails() {
         )}
 
         {/* Submit */}
-        <TouchableOpacity 
+        {/* <TouchableOpacity 
           style={[styles.submitBtn, { backgroundColor: '#2E5CAE' }]}
         >
           <Text style={styles.submitText}>Proceed to next</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+         <TouchableOpacity 
+                style={styles.submitBtn}
+                onPress={() => router.push('/Business_details/pan-details')}
+              >
+                <Text style={styles.buttonText}>Proceed to next</Text>
+              </TouchableOpacity>
       </View>
     </ScrollView>
   );

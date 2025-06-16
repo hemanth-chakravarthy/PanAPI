@@ -27,7 +27,7 @@ const VendorGstForm = () => {
 
   const handleProceed = () => {
     if (detailsMatched) {
-      router.push('/next-step'); // replace with actual path
+      router.push('/Business_details/BankVerificationBusiness'); // replace with actual path
     }
   };
 

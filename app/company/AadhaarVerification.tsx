@@ -1,14 +1,14 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import CheckBox from 'expo-checkbox';
-
+import { useRouter } from 'expo-router';
 const AadhaarVerification = () => {
   const [aadhaarNumber, setAadhaarNumber] = useState('');
   const [showOtpSection, setShowOtpSection] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [timer, setTimer] = useState(60);
   const [detailsMatched, setDetailsMatched] = useState(false);
-  
+  const router = useRouter();
   // OTP state
   const [otp, setOtp] = useState<string[]>(Array(6).fill(''));
   const otpInputRefs = useRef<(TextInput | null)[]>([]);
@@ -151,6 +151,12 @@ const AadhaarVerification = () => {
             </View>
 
         </View>
+        <TouchableOpacity
+  style={styles.button}
+  onPress={() => router.push('/company/Terms')} // Replace with your actual route
+>
+  <Text style={styles.buttonText}>Proceed to Next</Text>
+</TouchableOpacity>
       
     </View>
   );
@@ -270,6 +276,21 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Roboto',
     marginLeft: 8,
+  },
+
+
+  button: {
+    backgroundColor: '#007AFF', // iOS system blue color
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 20,
+    marginHorizontal: 20,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
 

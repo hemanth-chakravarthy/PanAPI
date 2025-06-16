@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
 import { RadioButton } from 'react-native-paper';
+import { useRouter } from 'expo-router'
 
 export default function FssaiStep4() {
   const [fssaiNumber, setFssaiNumber] = useState('');
   const [radioValue, setRadioValue] = useState('');
+  const router = useRouter();
 
   const handleUpload = () => {
     Alert.alert('Upload', 'FSSAI document upload triggered.');
   };
 
   const handleProceed = () => {
+    router.push('/company/BankVerification');
     Alert.alert('Next', 'Proceeding to next step...');
   };
 

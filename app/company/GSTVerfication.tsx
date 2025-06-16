@@ -56,7 +56,7 @@ const Step4GstScreen: React.FC = () => {
             <TouchableOpacity
                 disabled={!declaration}
                 style={[styles.nextButton, !declaration && { backgroundColor: '#ccc' }]}
-                onPress={() => router.push('/company/Business_details')}
+                onPress={() => router.push('/company/Uploading')}
             >
                 <Text style={styles.nextText}>Proceed to next</Text>
             </TouchableOpacity>

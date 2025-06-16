@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
+import { useRouter } from 'expo-router';
 export default function BankVerificationScreen() {
   const [isVerified, setIsVerified] = useState(false);
   const [bankAccountNumber, setBankAccountNumber] = useState('30123456789012');
   const [ifscCode, setIfscCode] = useState('SBIN0001234');
    const [error, setError] = useState('');
+   const router = useRouter();
   
   const handleVerification = () => {
    
@@ -17,6 +18,7 @@ export default function BankVerificationScreen() {
 
   const handleProceed = () => {
     // Handle proceed to next step
+    router.push('/Business_details/terms');
     console.log('Proceeding to next step...');
   };
 

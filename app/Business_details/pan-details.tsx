@@ -165,7 +165,7 @@ const PanDetailsScreen = () => {
               Alert.alert('Confirmation Needed', 'Please confirm that PAN details are matched.');
               return;
             }
-            router.push('./next-step');
+            router.push('/Business_details/aadhaarVerication');
           }}
         >
           <Text style={styles.bottomText}>Proceed to next</Text>

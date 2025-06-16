@@ -4,6 +4,7 @@ import { View, Text, TextInput, StyleSheet, ScrollView,TouchableOpacity, Image  
 import { Picker } from '@react-native-picker/picker';
 import CheckBox from 'expo-checkbox'
 import * as ImagePicker from 'expo-image-picker';
+import { useRouter } from 'expo-router';
 
 let states = [
     "select state",
@@ -60,6 +61,8 @@ const CompanyDetails = () => {
   const [bannerUri, setBannerUri] = useState<string | null>(null);
   const [officeContact, setOfficeContact] = useState('');
   const [officeWebsite, setOfficeWebsite] = useState('');
+
+  const router = useRouter();
 
   const pickImage = async (setImage: (uri: string | null) => void) => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -195,6 +198,14 @@ const CompanyDetails = () => {
         keyboardType="url"
         autoCapitalize="none"
       />
+
+      <TouchableOpacity
+  style={styles.button}
+  onPress={() => router.push('/company/AuthorizedPersonDetials')} // Replace with your actual route
+>
+  <Text style={styles.buttonText}>Proceed to Next</Text>
+</TouchableOpacity>
+
     </ScrollView>
   );
 };
@@ -322,6 +333,20 @@ const styles = StyleSheet.create({
     color: '#949494',
     textAlign: 'center',
     lineHeight: 11.67,
+  },
+
+  button: {
+    backgroundColor: '#007AFF', // iOS system blue color
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 20,
+    marginHorizontal: 20,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
 
