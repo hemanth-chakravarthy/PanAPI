@@ -1,10 +1,9 @@
 import express from 'express';
-import { gstVerification } from '../controllers/controller';
 import multer from 'multer';
 import { uploadFssaiData } from '../controllers/fssaiController';
-const router = express.Router();
 
-router.post('/gst/', gstVerification);
+const fssaiRouter = express.Router();
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'uploads/');
@@ -15,5 +14,7 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
-router.post('/upload', upload.single('document'), uploadFssaiData);
-export default router;
+
+fssaiRouter.post('/upload', upload.single('document'), uploadFssaiData);
+
+export default fssaiRouter;
