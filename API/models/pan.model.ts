@@ -16,6 +16,7 @@ export interface PanData {
   nameOnCard: string;
   lastUpdated: string;
   fetchedAt: Date;
+  sellerId: mongoose.Types.ObjectId; // ✅ Add this
 }
 
 // Extend Mongoose Document
@@ -36,8 +37,14 @@ const PanSchema = new Schema<IPan>({
   nameOnCard: { type: String },
   lastUpdated: { type: String },
   fetchedAt: { type: Date, default: Date.now },
+
+  // ✅ Add sellerId reference
+  sellerId: {
+    type: Schema.Types.ObjectId,
+    ref: 'CompanyDetail',
+    required: true,
+  },
 });
 
-// Export the model
 const PanModel = model<IPan>('PAN', PanSchema);
 export default PanModel;
