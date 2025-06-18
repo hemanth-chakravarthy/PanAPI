@@ -20,18 +20,21 @@ export const gstVerification = async (req: Request, res: Response): Promise <voi
     const externalGstData = await verifyGstinWithCashfree(gstin);
     const formattedData = formatGstDetails(externalGstData);
     const gstDocument = new GSTDetails(formattedData);
-    await gstDocument.save();
-
     
-    res.status(201).json({
-      message: 'GSTIN verified successfully',
-      data: {
-        gstin: formattedData.gstin,
-        legalName: formattedData.legalName,
-        taxPayerType: formattedData.taxpayerType,
-        gstinStatus: formattedData.status,
-      }
-    });
+    if (gstDocument.status == 'Active') {
+      await gstDocument.save();
+      res.status(201).json({
+        message: 'GSTIN verified successfully',
+        data: {
+          gstin: formattedData.gstin,
+          legalName: formattedData.legalName,
+          taxPayerType: formattedData.taxpayerType,
+          gstinStatus: formattedData.status,
+        }
+      });
+    } else {
+      res.status(200).json({warning: 'GSTIN is not active', data: formattedData });
+    }
   } catch (error) {
     console.error('GST Verification Error:', error);
     res.status(500).send({ error: 'Failed to verify GSTIN' });
