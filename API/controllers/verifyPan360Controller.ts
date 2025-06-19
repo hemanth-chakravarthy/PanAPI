@@ -59,7 +59,7 @@ const verifyPan360 = async (req: Request, res: Response) => {
     const payload = { pan, verification_id, name };
 
     const response = await axios.post<Pan360Response>(
-      'https://api.cashfree.com/verification/pan/advance',
+      'https://sandbox.cashfree.com/verification/pan/advance',
       payload,
       { headers }
     );
