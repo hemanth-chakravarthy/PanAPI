@@ -50,7 +50,7 @@ const getBulkPanStatus = async (req: Request, res: Response) => {
     if (bulk_verification_id) params.bulk_verification_id = bulk_verification_id as string;
 
     const response = await axios.get<BulkPanStatusResponse>(
-      'https://api.cashfree.com/verification/pan/bulk',
+      'https://sandbox.cashfree.com/verification/pan/bulk',
       { headers, params }
     );
 

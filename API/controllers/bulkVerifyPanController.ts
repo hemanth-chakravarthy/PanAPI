@@ -31,7 +31,7 @@ const bulkVerifyPan = async (req: Request, res: Response) => {
     };
 
     const response = await axios.post<BulkVerifyResponse>(
-      'https://api.cashfree.com/verification/pan/bulk',
+      'https://sandbox.cashfree.com/verification/pan/bulk',
       { bulk_verification_id, entries },
       { headers }
     );

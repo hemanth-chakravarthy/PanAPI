@@ -45,7 +45,7 @@ const verifyPanLite = async (req: Request, res: Response) => {
     const payload = { verification_id, pan, name, dob };
 
     const response = await axios.post<PanLiteResponse>(
-      'https://api.cashfree.com/verification/pan-lite',
+      'https://sandbox.cashfree.com/verification/pan-lite',
       payload,
       { headers }
     );

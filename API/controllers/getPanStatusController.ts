@@ -37,7 +37,7 @@ const getPanStatus = async (req: Request, res: Response) => {
     };
 
     const { data } = await axios.get<CashfreeStatusResponse>(
-      `https://api.cashfree.com/verification/pan/${referenceId}`,
+      `https://sandbox.cashfree.com/verification/pan/${referenceId}`,
       { headers }
     );
 
