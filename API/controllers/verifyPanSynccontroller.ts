@@ -1,20 +1,20 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
-import PAN, { IPan } from '../models/pan.model';
 import * as dotenv from 'dotenv';
+import PAN from '../models/pan.model';
 
 dotenv.config();
 
 interface CashfreeResponse {
   pan: string;
   type: string;
-  reference_id: string;
+  reference_id: number;
   name_provided: string;
   registered_name: string;
   valid: boolean;
   father_name: string;
   message: string;
-  name_match_score: string;
+  name_match_score: number;
   name_match_result: string;
   aadhaar_seeding_status: string;
   last_updated_at: string;
@@ -40,48 +40,40 @@ const verifyPanSync = async (req: Request, res: Response) => {
 
     const payload = { pan, name };
 
-    const { data } = await axios.post<CashfreeResponse>(
-      'https://sandbox.cashfree.com/verification/pan',
-      payload,
-      { headers }
-    );
+    const response = await axios.post('https://sandbox.cashfree.com/verification/pan', payload, { headers });
+    const d: CashfreeResponse = response.data.data;
 
-    if (!data.valid || data.pan_status !== 'VALID') {
-      res.status(400).json({ message: 'Invalid PAN or verification failed', data });
+    if (!d.valid || d.pan_status !== 'VALID') {
+      res.status(400).json({ message: 'Invalid PAN or verification failed', data: d });
       return;
     }
-
-    const record: Partial<IPan> = {
-      pan: data.pan,
-      name: data.registered_name,
-      panType: data.type,
-      referenceId: data.reference_id,
-      status: data.pan_status,
-      nameProvided: data.name_provided,
-      nameMatchScore: data.name_match_score,
-      nameMatchResult: data.name_match_result,
-      aadhaarStatus: data.aadhaar_seeding_status,
-      aadhaarStatusDesc: data.aadhaar_seeding_status_desc,
-      fatherName: data.father_name,
-      nameOnCard: data.name_pan_card,
-      lastUpdated: data.last_updated_at,
-      fetchedAt: new Date(),
-    };
-
-    await PAN.findOneAndUpdate({ pan }, record, { upsert: true });
+    
+    await PAN.findOneAndUpdate({ pan: d.pan }, d, { upsert: true });
 
     res.status(200).json({
-      message: 'PAN verified and stored successfully (production)',
-      data: record,
+      pan: d.pan,
+      type: d.type,
+      reference_id: d.reference_id,
+      name_provided: d.name_provided,
+      registered_name: d.registered_name,
+      valid: d.valid,
+      message: d.message,
+      name_match_score: d.name_match_score,
+      name_match_result: d.name_match_result,
+      aadhaar_seeding_status: d.aadhaar_seeding_status,
+      last_updated_at: d.last_updated_at,
+      name_pan_card: d.name_pan_card,
+      pan_status: d.pan_status,
+      aadhaar_seeding_status_desc: d.aadhaar_seeding_status_desc
     });
-    return;
+    return ;
   } catch (err: any) {
     console.error('PAN verification error:', err.message);
     res.status(500).json({
       error: 'PAN verification failed',
       details: err.response?.data || err.message,
     });
-    return;
+    return ;
   }
 };
 
