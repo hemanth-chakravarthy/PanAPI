@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
 import * as dotenv from 'dotenv';
+import PAN from '../models/pan.model';
 
 dotenv.config();
 
@@ -33,7 +34,7 @@ const verifyPanLite = async (req: Request, res: Response) => {
       res.status(400).json({
         error: 'verification_id, pan, name, and dob are required',
       });
-      return ;
+      return;
     }
 
     const headers = {
@@ -50,20 +51,38 @@ const verifyPanLite = async (req: Request, res: Response) => {
       { headers }
     );
 
-    console.log('✅ PAN Lite Response:', response.data); // debug log
+    const d = response.data;
+
+    await PAN.findOneAndUpdate(
+      { pan: d.pan },
+      {
+        pan: d.pan,
+        name: d.name,
+        referenceId: d.reference_id.toString(),
+        status: d.status,
+        nameProvided: d.name,
+        nameMatchScore: d.name_match,
+        nameMatchResult: d.name_match,
+        aadhaarStatus: d.aadhaar_seeding_status,
+        aadhaarStatusDesc: d.aadhaar_seeding_status_desc,
+        lastUpdated: new Date().toISOString(),
+        fetchedAt: new Date(),
+      },
+      { upsert: true }
+    );
 
     res.status(200).json({
-      message: 'PAN Lite verification successful',
-      data: response.data,
+      message: '✅ PAN Lite verification successful',
+      data: d,
     });
-    return ;
+    return;
   } catch (error: any) {
     console.error('❌ PAN Lite verification error:', error.message);
     res.status(500).json({
       error: 'PAN Lite verification failed',
       details: error.response?.data || error.message,
     });
-    return ;
+    return;
   }
 };
 

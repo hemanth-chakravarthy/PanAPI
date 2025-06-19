@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
 import * as dotenv from 'dotenv';
+import PAN from '../models/pan.model';
+
 dotenv.config();
 
 interface Pan360Request {
@@ -47,7 +49,7 @@ const verifyPan360 = async (req: Request, res: Response) => {
       res.status(400).json({
         error: 'pan, verification_id, and name are required',
       });
-      return ;
+      return;
     }
 
     const headers = {
@@ -64,20 +66,41 @@ const verifyPan360 = async (req: Request, res: Response) => {
       { headers }
     );
 
-    console.log('✅ PAN 360 Raw Response:', response.data); // optional debug
+    const d = response.data;
+
+    await PAN.findOneAndUpdate(
+      { pan: d.pan },
+      {
+        pan: d.pan,
+        name: d.registered_name,
+        panType: d.type,
+        referenceId: d.reference_id.toString(),
+        status: d.status,
+        nameProvided: d.name_provided,
+        nameMatchScore: d.name_provided, // optional mapping
+        nameMatchResult: d.name_pan_card,
+        aadhaarStatus: d.aadhaar_linked ? 'Y' : 'N',
+        aadhaarStatusDesc: d.aadhaar_linked ? 'Aadhaar is linked to PAN' : 'Not linked',
+        fatherName: '',
+        nameOnCard: d.name_pan_card,
+        lastUpdated: new Date().toISOString(),
+        fetchedAt: new Date(),
+      },
+      { upsert: true }
+    );
 
     res.status(200).json({
       message: 'PAN 360 verification successful',
-      data: response.data, // ✅ pass exactly as returned
+      data: d,
     });
-    return ;
+    return;
   } catch (error: any) {
     console.error('❌ PAN 360 verification error:', error.message);
     res.status(500).json({
       error: 'PAN 360 verification failed',
       details: error.response?.data || error.message,
     });
-    return ;
+    return;
   }
 };
 

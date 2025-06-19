@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
 import * as dotenv from 'dotenv';
+import PAN, { IPan } from '../models/pan.model'; 
 
 dotenv.config();
 
@@ -37,7 +38,7 @@ const getBulkPanStatus = async (req: Request, res: Response) => {
       res.status(400).json({
         error: 'Either reference_id or bulk_verification_id is required',
       });
-      return ;
+      return;
     }
 
     const headers = {
@@ -54,20 +55,41 @@ const getBulkPanStatus = async (req: Request, res: Response) => {
       { headers, params }
     );
 
-    console.log(' Bulk PAN response:', response.data);
+    const bulkEntries = response.data.entries;
+
+    for (const entry of bulkEntries) {
+      const record: Partial<IPan> = {
+        pan: entry.pan,
+        name: entry.registered_name,
+        panType: entry.type,
+        referenceId: entry.reference_id.toString(),
+        status: entry.pan_status,
+        nameProvided: entry.name_provided,
+        nameMatchScore: entry.name_match_score.toString(),
+        nameMatchResult: entry.name_match_result,
+        aadhaarStatus: entry.aadhaar_seeding_status,
+        aadhaarStatusDesc: entry.aadhaar_seeding_status_desc,
+        fatherName: entry.father_name,
+        nameOnCard: entry.name_pan_card,
+        lastUpdated: entry.last_updated_at,
+        fetchedAt: new Date(),
+      };
+
+      await PAN.findOneAndUpdate({ pan: entry.pan }, record, { upsert: true });
+    }
 
     res.status(200).json({
-      message: 'Bulk PAN verification status retrieved successfully',
-      data: response.data, 
+      message: 'Bulk PAN verification status retrieved and saved successfully',
+      data: response.data,
     });
-    return ;
+    return;
   } catch (error: any) {
-    console.error(' Bulk PAN status fetch error:', error.message);
+    console.error('Bulk PAN status fetch error:', error.message);
     res.status(500).json({
       error: 'Failed to fetch bulk PAN status',
       details: error.response?.data || error.message,
     });
-    return ;
+    return;
   }
 };
 

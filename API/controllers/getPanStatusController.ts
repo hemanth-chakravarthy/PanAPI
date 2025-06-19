@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
 import * as dotenv from 'dotenv';
+import PAN, { IPan } from '../models/pan.model';
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ const getPanStatus = async (req: Request, res: Response) => {
     const headers = {
       'x-client-id': process.env.CASHFREE_CLIENT_ID!,
       'x-client-secret': process.env.CASHFREE_CLIENT_SECRET!,
+      'x-api-version': '2022-09-13',
     };
 
     const { data } = await axios.get<CashfreeStatusResponse>(
@@ -41,9 +43,28 @@ const getPanStatus = async (req: Request, res: Response) => {
       { headers }
     );
 
+    const record: Partial<IPan> = {
+      pan: data.pan,
+      name: data.registered_name,
+      panType: data.type,
+      referenceId: data.reference_id.toString(),
+      status: data.pan_status,
+      nameProvided: data.name_provided,
+      nameMatchScore: data.name_match_score,
+      nameMatchResult: data.name_match_result,
+      aadhaarStatus: data.aadhaar_seeding_status,
+      aadhaarStatusDesc: data.aadhaar_seeding_status_desc,
+      fatherName: data.father_name,
+      nameOnCard: data.name_pan_card,
+      lastUpdated: data.last_updated_at,
+      fetchedAt: new Date(),
+    };
+
+    await PAN.findOneAndUpdate({ pan: data.pan }, record, { upsert: true });
+
     res.status(200).json({
-      message: 'PAN verification status retrieved successfully (production)',
-      data, 
+      message: 'PAN verification status retrieved and saved successfully',
+      data,
     });
     return;
   } catch (error: any) {
@@ -52,7 +73,7 @@ const getPanStatus = async (req: Request, res: Response) => {
       error: 'Failed to fetch PAN status',
       details: error.response?.data || error.message,
     });
-    return ;
+    return;
   }
 };
 

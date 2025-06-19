@@ -1,6 +1,5 @@
 import mongoose, { Schema, Document, model } from 'mongoose';
 
-// Define plain interface
 export interface PanData {
   pan: string;
   name: string;
@@ -16,10 +15,9 @@ export interface PanData {
   nameOnCard: string;
   lastUpdated: string;
   fetchedAt: Date;
-  sellerId: mongoose.Types.ObjectId; // ✅ Add this
+  sellerId: mongoose.Types.ObjectId; 
 }
 
-// Extend Mongoose Document
 export interface IPan extends Document, PanData {}
 
 const PanSchema = new Schema<IPan>({
@@ -38,7 +36,6 @@ const PanSchema = new Schema<IPan>({
   lastUpdated: { type: String },
   fetchedAt: { type: Date, default: Date.now },
 
-  // ✅ Add sellerId reference
   sellerId: {
     type: Schema.Types.ObjectId,
     ref: 'CompanyDetail',

@@ -35,7 +35,7 @@ const verifyPanSync = async (req: Request, res: Response) => {
     const headers = {
       'x-client-id': process.env.CASHFREE_CLIENT_ID!,
       'x-client-secret': process.env.CASHFREE_CLIENT_SECRET!,
-      'x-api-version': '2022-09-13', // ✅ required
+      'x-api-version': '2022-09-13',
       'Content-Type': 'application/json',
     };
 
@@ -57,7 +57,6 @@ const verifyPanSync = async (req: Request, res: Response) => {
       return;
     }
 
-    // Save record to DB
     await PAN.findOneAndUpdate({ pan: d.pan }, d, { upsert: true });
 
     res.status(200).json({
