@@ -45,9 +45,10 @@ const bulkVerifyPan = async (req: Request, res: Response) => {
     const { bulk_verification_id, entries }: BulkVerifyRequest = req.body;
 
     if (!bulk_verification_id || !Array.isArray(entries) || entries.length < 2) {
-      return res.status(400).json({
+      res.status(400).json({
         error: 'bulk_verification_id and at least 2 PAN entries are required',
       });
+      return ;
     }
 
     const headers = {
@@ -97,18 +98,20 @@ const bulkVerifyPan = async (req: Request, res: Response) => {
       savedRecords.push(entry.pan);
     }
 
-    return res.status(200).json({
+    res.status(200).json({
       message: 'Bulk PAN verification complete and entries saved to DB',
       reference_id: referenceId,
       saved: savedRecords,
     });
+    return;
 
   } catch (error: any) {
     console.error('❌ Bulk PAN verification error:', error.message);
-    return res.status(500).json({
+    res.status(500).json({
       error: 'Bulk PAN verification failed',
       details: error.response?.data || error.message,
     });
+    return;
   }
 };
 
