@@ -1,14 +1,23 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "commonjs",
+    "module": "esnext", // CHANGED: from "commonjs" to "esnext" for modern module handling
+    // You could also try "nodenext" if "esnext" causes issues with ts-node on your setup.
     "rootDir": "./",
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+
+    // --- ADD THESE LINES ---
+    "moduleResolution": "node", // Explicitly define module resolution
+    "typeRoots": [
+      "./node_modules/@types", // Standard location for installed types
+      "../types" // Point to the 'types' folder at the project root for custom types
+    ]
+    // ----------------------
   },
   "include": ["**/*.ts"],
   "exclude": ["node_modules", "dist"]

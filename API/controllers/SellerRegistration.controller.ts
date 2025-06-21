@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import CompanyDetail from "../models/CompanyDetails.model";
+import CompanyDetail from "../models/CompanyDetails.model.js";
 
 export const setCompanyDetails = async (req: Request, res: Response, next: NextFunction )=> {
   try {

@@ -1,7 +1,7 @@
 import express from 'express';
-import { gstVerification } from '../controllers/controller';
+import { gstVerification } from '../controllers/controller.js';
 import multer from 'multer';
-import { uploadFssaiData } from '../controllers/fssaiController';
+import { uploadFssaiData } from '../controllers/fssaiController.js';
 const router = express.Router();
 
 router.post('/gst/', gstVerification);

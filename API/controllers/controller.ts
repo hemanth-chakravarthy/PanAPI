@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { verifyGstinWithCashfree } from '../services/verifygstService';
-import { formatGstDetails } from '../utils/gstFormatter';
-import GSTDetails from '../models/GSTDetails';
+import { verifyGstinWithCashfree } from '../services/verifygstService.js';
+import { formatGstDetails } from '../utils/gstFormatter.js';
+import GSTDetails from '../models/GSTDetails.js';
 
 export const gstVerification = async (req: Request, res: Response): Promise <void> => {
   const { gstin }= req.body;
