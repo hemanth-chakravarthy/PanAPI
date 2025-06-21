@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { uploadFssaiData } from '../controllers/fssaiController';
+import { uploadFssaiData } from '../controllers/fssaiController.js';
 
 const fssaiRouter = express.Router();
 

@@ -1,19 +1,16 @@
 {
-  "compilerOptions": {
-    "jsx": "react-jsx",
-    // ...other options
-  },
-  "extends": "expo/tsconfig.base",
+  "extends": "expo/tsconfig.base", // Keep extending the Expo base config
+
   "compilerOptions": {
     "baseUrl": ".",
     "strict": true,
-    "jsx": "react-native",
+    "jsx": "react-native", // Use react-native for JSX as per your project
     "paths": {
       "@/*": [
         "./*"
       ]
     },
-    "target": "es5",
+    "target": "es5", // Keep es5 as it's common for Expo builds
     "lib": [
       "dom",
       "dom.iterable",
@@ -21,21 +18,29 @@
     ],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "bundler", // Changed from "node" to "bundler"
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "preserveConstEnums": true, // Often useful in Expo/React Native projects
+    "allowSyntheticDefaultImports": true, // Often needed for some imports
+
+    // --- ADD/UPDATE THESE LINES ---
+    "typeRoots": [
+      "./node_modules/@types", // Standard location for installed types
+      "./types" // This tells TypeScript to look in your local 'types' folder for .d.ts files
+    ]
+    // ----------------------------
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "expo-env.d.ts",
+    "types/**/*.d.ts" // Explicitly include your custom declaration files here
   ],
   "exclude": [
     "node_modules"

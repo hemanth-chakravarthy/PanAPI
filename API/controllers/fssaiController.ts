@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Fssai } from '../models/fssaiModel';
+import { Fssai } from '../models/fssaiModel.js';
 
 export const uploadFssaiData = async (req: Request, res: Response): Promise<void> => {
   try {

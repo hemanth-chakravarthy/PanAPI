@@ -1,8 +1,7 @@
 import express, { Router } from 'express';
 import multer, { StorageEngine } from 'multer';
-import { addShopDetails, gstVerification } from '../controllers/controller';
-import { uploadFssaiData } from '../controllers/fssaiController';
-
+import { addShopDetails, gstVerification } from '../controllers/controller.js';
+import { uploadFssaiData } from '../controllers/fssaiController.js';
 const router: Router = express.Router();
 
 // Configure multer storage
