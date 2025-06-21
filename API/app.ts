@@ -1,32 +1,37 @@
 import dotenv from 'dotenv';
-import aadhaarRoutes from './routes/aadhaarRoutes';
-dotenv.config(); 
+dotenv.config();
 
-import express, { Request, Response } from 'express';
+import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
-import db from './config/db';
-import route from './routes/route';
+import path from 'path';
+import connectDB from './config/db';
+import shopRoutes from './routes/route';
+import aadhaarRoutes from './routes/aadhaarRoutes';
 
-db();
+const app: Application = express();
 
-const app = express();
+// Connect to DB
+connectDB();
 
+// Middleware
 app.use(cors({
   origin: process.env.CLIENT_URL || 'http://localhost:3000'
 }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.use('/api', route);
+// Routes
+app.use('/api', shopRoutes);
+app.use('/api/aadhaar', aadhaarRoutes);
 
+// Test route
 app.get('/api/test', (req: Request, res: Response) => {
   res.json({ message: 'This is a test' });
 });
 
-app.use('/api/aadhaar', aadhaarRoutes);
-
-const PORT = process.env.PORT || 5000;
+// Server
+const PORT: string | number = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-
-

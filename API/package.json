@@ -3,17 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.ts",
+  "type": "commonjs",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only app.ts",
     "start": "ts-node app.ts",
-    "type-check": "tsc --noEmit",
+    "start:prod": "node dist/app.js",
     "build": "tsc",
+    "type-check": "tsc --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "axios": "^1.7.4",
     "cloudinary": "^1.41.3",
