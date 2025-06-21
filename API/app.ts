@@ -1,33 +1,36 @@
 import dotenv from 'dotenv';
 dotenv.config(); 
-
-import express, { Request, Response } from 'express';
+import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
-import db from './config/db.js';
-import route from './routes/route.js';
 import aadhaarRoutes from './routes/aadhaarRoutes.js';
-
-
 import uploadRoutes from './routes/uploadRoutes.js'; 
+import path from 'path';
+import connectDB from './config/db.js';
+import shopRoutes from './routes/route.js';
 
-db();
+const app: Application = express();
 
-const app = express();
+// Connect to DB
+connectDB();
 
+// Middleware
 app.use(cors({
   origin: process.env.CLIENT_URL || 'http://localhost:3000'
 }));
 app.use(express.json()); 
+app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-
+// Routes
 app.use('/api', uploadRoutes);
-app.use('/api', route);
+app.use('/api', shopRoutes);
 app.use('/api/aadhaar', aadhaarRoutes); 
 
+
+// Test route
 app.get('/api/test', (req: Request, res: Response) => {
   res.json({ message: 'This is a test' });
 });
-
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

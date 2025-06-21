@@ -1,24 +1,42 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "esnext", // CHANGED: from "commonjs" to "esnext" for modern module handling
-    // You could also try "nodenext" if "esnext" causes issues with ts-node on your setup.
-    "rootDir": "./",
+    "module": "esnext",
+    "lib": ["ES2020"],
     "outDir": "./dist",
+    "rootDir": "./",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
-
-    // --- ADD THESE LINES ---
-    "moduleResolution": "node", // Explicitly define module resolution
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
     "typeRoots": [
-      "./node_modules/@types", // Standard location for installed types
-      "../types" // Point to the 'types' folder at the project root for custom types
-    ]
-    // ----------------------
+      "./node_modules/@types",
+      "../types"
+    ],
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "removeComments": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    "exactOptionalPropertyTypes": true
   },
-  "include": ["**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "**/*.ts",
+    "**/*.js"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "uploads"
+  ]
 }
