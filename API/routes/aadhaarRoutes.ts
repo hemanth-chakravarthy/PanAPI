@@ -1,5 +1,5 @@
 import express from 'express';
-import { handleSendOTP, handleVerifyOTP } from '../controllers/aadhaarVerificationController.js';
+import { handleSendOTP, handleVerifyOTP } from '../controllers/aadhaarVerificationController';
 
 const router = express.Router();
 

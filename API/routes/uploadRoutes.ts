@@ -2,8 +2,8 @@
 
 import { Router } from 'express';
 import multer from 'multer';
-import { uploadSupportingDocumentToCashfree } from '../controllers/documentUploadController.js';
-import asyncHandler from '../utils/asyncHandler.js'; // Import the new async handler utility
+import { uploadSupportingDocumentToCashfree } from '../controllers/documentUploadController';
+import asyncHandler from '../utils/asyncHandler'; // Import the new async handler utility
 
 const router = Router();
 

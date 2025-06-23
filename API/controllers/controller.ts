@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import Shop, { IShop } from '../models/data.js';
-import { verifyGstinWithCashfree } from '../services/verifygstService.js';
-import { formatGstDetails } from '../utils/gstFormatter.js';
-import GSTDetails from '../models/GSTDetails.js';
+import Shop, { IShop } from '../models/data';
+import { verifyGstinWithCashfree } from '../services/verifygstService';
+import { formatGstDetails } from '../utils/gstFormatter';
+import GSTDetails from '../models/GSTDetails';
 
 // Define interface for the request body
 interface ShopRequestBody {

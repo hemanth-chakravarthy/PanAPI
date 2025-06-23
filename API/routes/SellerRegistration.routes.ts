@@ -1,6 +1,6 @@
 import express from "express";
 import upload from "../middlewares/upload";
-import { setCompanyDetails } from "../controllers/SellerRegistration.controller.js";
+import { setCompanyDetails } from "../controllers/SellerRegistration.controller";
 
 const router = express.Router();
 

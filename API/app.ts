@@ -4,16 +4,16 @@ import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import path from 'path';
 
-import sellerRegistrationRoutes from './routes/SellerRegistration.routes.';
+import SellerRegistrationRoutes from './routes/SellerRegistration.routes';
 import route from './routes/route';
-import aadhaarRoutes from './routes/aadhaarRoutes.js';
-import uploadRoutes from './routes/uploadRoutes.js';
-import shopRoutes from './routes/route.js';
-import bankRoutes from './routes/bank.route.js';
+import aadhaarRoutes from './routes/aadhaarRoutes';
+import uploadRoutes from './routes/uploadRoutes';
+import shopRoutes from './routes/route';
+import bankRoutes from './routes/bank.route';
 
 import { errorHandler } from './middlewares/errorHandler.middleware';
 
-import connectDB from './config/db.js';
+import connectDB from './config/db';
 
 dotenv.config();
 
@@ -32,7 +32,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.use('/api/register', sellerRegistrationRoutes);
+app.use('/api/register', SellerRegistrationRoutes);
 app.use('/api', route);
 app.use('/api', uploadRoutes);
 app.use('/api', shopRoutes);

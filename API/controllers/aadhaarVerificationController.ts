@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { sendAadhaarOTP,verifyAadhaarOTP } from '../services/aadhaarService.js';
-import AadhaarUser from '../models/aadhaarModel.js';
+import { sendAadhaarOTP,verifyAadhaarOTP } from '../services/aadhaarService';
+import AadhaarUser from '../models/aadhaarModel';
 
 export const handleSendOTP = async (req: Request, res: Response) => {
   const { aadhaar } = req.body;

@@ -1,7 +1,7 @@
 // API/controllers/documentUploadController.ts
 import { Request, Response, NextFunction } from 'express';
 // import DocumentUploadService from '../services/documentUploadService'; // You might not need this import if you remove all Cashfree interactions
-import DocumentModel from '../models/documentModel.js';
+import DocumentModel from '../models/documentModel';
 import fs from 'fs/promises'; // Import fs for file deletion if needed
 
 export const uploadSupportingDocumentToCashfree = async (req: Request, res: Response, next: NextFunction) => {
