@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import path from 'path';
+import panRoutes from './routes/pan.route';
 
 import SellerRegistrationRoutes from './routes/SellerRegistration.routes';
 import route from './routes/route';
@@ -38,6 +39,7 @@ app.use('/api', uploadRoutes);
 app.use('/api', shopRoutes);
 app.use('/api/aadhaar', aadhaarRoutes);
 app.use('/api/bank-verification', bankRoutes);
+app.use('/api/pan', panRoutes);
 
 app.get('/api/test', (req: Request, res: Response) => {
   res.json({ message: 'This is a test' });
