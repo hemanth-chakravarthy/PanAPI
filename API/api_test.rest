@@ -1,7 +1,7 @@
-### Teste de verificação de GSTIN na API local (localhost)
+###Test Verification(localhost)
 POST http://localhost:5000/api/gstin HTTP/1.1
 Content-Type: application/json
 
 {
-    "GSTIN": "29AAICP2912R1ZR"
+    "gstin": "36JKLPQR9012E2Y"
 }

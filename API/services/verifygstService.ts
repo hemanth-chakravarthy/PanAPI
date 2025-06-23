@@ -28,8 +28,12 @@ export const verifyGstinWithCashfree = async (gstin: string): Promise<any> => {
       }
     );
 
+    console.log('GSTIN verification response:', response);
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.response) {
+      console.error('Error response from Cashfree:', error.response.data);
+    }
     throw new Error(
       `Error while verifying GSTIN with Cashfree: ${(error as Error).message}`
     );
