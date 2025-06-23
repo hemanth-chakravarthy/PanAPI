@@ -4,7 +4,12 @@ import { formatGstDetails } from '../utils/gstFormatter';
 import GSTDetails from '../models/GSTDetails';
 
 export const gstVerification = async (req: Request, res: Response): Promise <void> => {
-  const { gstin }= req.body;
+  const { gstin, sellerId}= req.body;
+
+  if (!gstin || !sellerId) {
+    res.status(400).send({ error: 'GSTIN and Seller ID are required' });
+    return;
+  }
 
   try {
     const gstData = await GSTDetails.findOne({ gstin });
@@ -19,7 +24,10 @@ export const gstVerification = async (req: Request, res: Response): Promise <voi
 
     const externalGstData = await verifyGstinWithCashfree(gstin);
     const formattedData = formatGstDetails(externalGstData);
-    const gstDocument = new GSTDetails(formattedData);
+    const gstDocument = new GSTDetails({
+      ...formattedData,
+      SellerId: sellerId,
+    });
     
     if (gstDocument.status == 'Active') {
       await gstDocument.save();

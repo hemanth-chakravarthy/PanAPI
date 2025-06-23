@@ -3,5 +3,6 @@ POST http://localhost:5000/api/gstin HTTP/1.1
 Content-Type: application/json
 
 {
-    "gstin": "36JKLPQR9012E2Y"
+  "gstin": "27ABCFGH5678D1Z",
+  "sellerId": "665fb9e0d9a731c99ff417e4"
 }

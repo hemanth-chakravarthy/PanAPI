@@ -1,6 +1,11 @@
 import mongoose, {Schema} from 'mongoose';
 
 const GSTDetailsSchema = new Schema({
+    SellerId: {
+        type: Schema.Types.ObjectId,
+        ref: 'CompanyDetail',
+        required: true,
+    },
     referenceId: Number,
     gstin: String,
     legalName: String,
