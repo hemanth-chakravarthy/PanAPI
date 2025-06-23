@@ -2,9 +2,9 @@ import express, { Router } from 'express';
 import multer, { StorageEngine } from 'multer';
 import { addShopDetails, gstVerification } from '../controllers/controller.js';
 import { uploadFssaiData } from '../controllers/fssaiController.js';
+
 const router: Router = express.Router();
 
-// Configure multer storage
 const storage: StorageEngine = multer.diskStorage({
   destination: (_req, _file, cb) => {
     cb(null, 'uploads/');
@@ -16,7 +16,6 @@ const storage: StorageEngine = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Shop details route (from Mithilesh-Iruvuri branch)
 router.post(
   '/shop',
   upload.fields([
@@ -27,10 +26,8 @@ router.post(
   addShopDetails
 );
 
-// GST verification route (from main branch)
-router.post('/gst/', gstVerification);
+router.post('/gstin', gstVerification);
 
-// FSSAI upload route (from main branch)
 router.post('/upload', upload.single('document'), uploadFssaiData);
 
 export default router;

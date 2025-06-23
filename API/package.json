@@ -7,6 +7,7 @@
     "dev": "ts-node-dev --respawn --transpile-only app.ts",
     "start": "ts-node app.ts",
     "type-check": "tsc --noEmit",
+    "start:prod": "node dist/app.js",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

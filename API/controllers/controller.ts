@@ -17,7 +17,7 @@ interface ShopRequestBody {
   pickupAddressSame: string;
 }
 
-// Shop details controller (from Mithilesh-Iruvuri branch)
+// Shop details controller
 export const addShopDetails = async (req: Request, res: Response): Promise<void> => {
   try {
     const {
@@ -60,9 +60,14 @@ export const addShopDetails = async (req: Request, res: Response): Promise<void>
   }
 };
 
-// GST verification controller (from main branch)
+// GST verification controller
 export const gstVerification = async (req: Request, res: Response): Promise<void> => {
-  const { gstin } = req.body;
+  const { gstin, sellerId } = req.body;
+
+  if (!gstin || !sellerId) {
+    res.status(400).send({ error: 'GSTIN and Seller ID are required' });
+    return;
+  }
 
   try {
     const gstData = await GSTDetails.findOne({ gstin });
@@ -77,18 +82,26 @@ export const gstVerification = async (req: Request, res: Response): Promise<void
 
     const externalGstData = await verifyGstinWithCashfree(gstin);
     const formattedData = formatGstDetails(externalGstData);
-    const gstDocument = new GSTDetails(formattedData);
-    await gstDocument.save();
 
-    res.status(201).json({
-      message: 'GSTIN verified successfully',
-      data: {
-        gstin: formattedData.gstin,
-        legalName: formattedData.legalName,
-        taxPayerType: formattedData.taxpayerType,
-        gstinStatus: formattedData.status,
-      }
+    const gstDocument = new GSTDetails({
+      ...formattedData,
+      SellerId: sellerId,
     });
+
+    if (gstDocument.status === 'Active') {
+      await gstDocument.save();
+      res.status(201).json({
+        message: 'GSTIN verified successfully',
+        data: {
+          gstin: formattedData.gstin,
+          legalName: formattedData.legalName,
+          taxPayerType: formattedData.taxpayerType,
+          gstinStatus: formattedData.status,
+        }
+      });
+    } else {
+      res.status(200).json({ warning: 'GSTIN is not active', data: formattedData });
+    }
   } catch (error) {
     console.error('GST Verification Error:', error);
     res.status(500).send({ error: 'Failed to verify GSTIN' });
