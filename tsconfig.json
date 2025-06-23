@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "extends": "expo/tsconfig.base", // Keep extending the Expo base config
 
@@ -46,3 +47,15 @@
     "node_modules"
   ]
 }
+=======
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "outDir": "dist",
+    "rootDir": "src",
+    "strict": true,
+    "esModuleInterop": true
+  }
+}
+>>>>>>> 5ba836efb619eba6f1977210b6eba31e5f861a4e
