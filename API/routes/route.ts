@@ -1,7 +1,33 @@
-import express from 'express';
-import { gstVerification } from '../controllers/controller';
-const router = express.Router();
+import express, { Router } from 'express';
+import multer, { StorageEngine } from 'multer';
+import { addShopDetails, gstVerification } from '../controllers/controller.js';
+import { uploadFssaiData } from '../controllers/fssaiController.js';
 
-router.post('/gstin/', gstVerification);
+const router: Router = express.Router();
+
+const storage: StorageEngine = multer.diskStorage({
+  destination: (_req, _file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (_req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  }
+});
+
+const upload = multer({ storage });
+
+router.post(
+  '/shop',
+  upload.fields([
+    { name: 'logo', maxCount: 1 },
+    { name: 'banner', maxCount: 1 },
+    { name: 'selfiePhoto', maxCount: 1 }
+  ]),
+  addShopDetails
+);
+
+router.post('/gstin', gstVerification);
+
+router.post('/upload', upload.single('document'), uploadFssaiData);
 
 export default router;

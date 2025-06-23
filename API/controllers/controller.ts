@@ -1,10 +1,68 @@
 import { Request, Response } from 'express';
-import { verifyGstinWithCashfree } from '../services/verifygstService';
-import { formatGstDetails } from '../utils/gstFormatter';
-import GSTDetails from '../models/GSTDetails';
+import Shop, { IShop } from '../models/data.js';
+import { verifyGstinWithCashfree } from '../services/verifygstService.js';
+import { formatGstDetails } from '../utils/gstFormatter.js';
+import GSTDetails from '../models/GSTDetails.js';
 
-export const gstVerification = async (req: Request, res: Response): Promise <void> => {
-  const { gstin, sellerId}= req.body;
+// Define interface for the request body
+interface ShopRequestBody {
+  businessName: string;
+  pincode: string;
+  doorNumber: string;
+  landmark: string;
+  colony: string;
+  city: string;
+  district: string;
+  state: string;
+  pickupAddressSame: string;
+}
+
+// Shop details controller
+export const addShopDetails = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {
+      businessName,
+      pincode,
+      doorNumber,
+      landmark,
+      colony,
+      city,
+      district,
+      state,
+      pickupAddressSame
+    } = req.body as ShopRequestBody;
+
+    // Type assertion for multer files
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] } | undefined;
+
+    const shop: IShop = new Shop({
+      businessName,
+      businessAddress: {
+        pincode,
+        doorNumber,
+        landmark,
+        colony,
+        city,
+        district,
+        state
+      },
+      pickupAddressSame: pickupAddressSame === 'true',
+      logo: files?.['logo']?.[0]?.filename || '',
+      banner: files?.['banner']?.[0]?.filename || '',
+      selfiePhoto: files?.['selfiePhoto']?.[0]?.filename || ''
+    });
+
+    await shop.save();
+    res.status(201).json({ message: 'Shop details saved successfully', shop });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to save shop details' });
+  }
+};
+
+// GST verification controller
+export const gstVerification = async (req: Request, res: Response): Promise<void> => {
+  const { gstin, sellerId } = req.body;
 
   if (!gstin || !sellerId) {
     res.status(400).send({ error: 'GSTIN and Seller ID are required' });
@@ -24,12 +82,13 @@ export const gstVerification = async (req: Request, res: Response): Promise <voi
 
     const externalGstData = await verifyGstinWithCashfree(gstin);
     const formattedData = formatGstDetails(externalGstData);
+
     const gstDocument = new GSTDetails({
       ...formattedData,
       SellerId: sellerId,
     });
-    
-    if (gstDocument.status == 'Active') {
+
+    if (gstDocument.status === 'Active') {
       await gstDocument.save();
       res.status(201).json({
         message: 'GSTIN verified successfully',
@@ -41,10 +100,10 @@ export const gstVerification = async (req: Request, res: Response): Promise <voi
         }
       });
     } else {
-      res.status(200).json({warning: 'GSTIN is not active', data: formattedData });
+      res.status(200).json({ warning: 'GSTIN is not active', data: formattedData });
     }
   } catch (error) {
     console.error('GST Verification Error:', error);
     res.status(500).send({ error: 'Failed to verify GSTIN' });
   }
-}
+};

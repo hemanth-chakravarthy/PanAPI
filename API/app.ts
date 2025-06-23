@@ -1,33 +1,53 @@
-import express, { Request, Response } from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import sellerRegistrationRoutes from "./routes/SellerRegistration.routes.";
-import bodyParser from "body-parser";
-import { errorHandler } from "./middlewares/errorHandler.middleware";
-import db from "./config/db";
+import express, { Application, Request, Response } from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import bodyParser from 'body-parser';
+import path from 'path';
+
+import sellerRegistrationRoutes from './routes/SellerRegistration.routes.';
 import route from './routes/route';
+import aadhaarRoutes from './routes/aadhaarRoutes.js';
+import uploadRoutes from './routes/uploadRoutes.js';
+import shopRoutes from './routes/route.js';
+import bankRoutes from './routes/bank.route.js';
 
+import { errorHandler } from './middlewares/errorHandler.middleware';
 
-db();
+import connectDB from './config/db.js';
 
 dotenv.config();
 
-const app = express();
+const app: Application = express();
 
-app.use(cors({ origin: "http://localhost:3000" }));
-app.use(bodyParser.urlencoded({ extended: true }));
+connectDB();
+
+app.use(cors({
+  origin: process.env.CLIENT_URL || 'http://localhost:3000'
+}));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use("/api/register", sellerRegistrationRoutes);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+app.use('/api/register', sellerRegistrationRoutes);
 app.use('/api', route);
+app.use('/api', uploadRoutes);
+app.use('/api', shopRoutes);
+app.use('/api/aadhaar', aadhaarRoutes);
+app.use('/api/bank-verification', bankRoutes);
 
-app.get("/api/test", (req: Request, res: Response) => {
-  res.json({ message: "This is a test" });
+app.get('/api/test', (req: Request, res: Response) => {
+  res.json({ message: 'This is a test' });
 });
 
-app.use(errorHandler); // errror handler
+app.use(errorHandler);
 
+// 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  console.log('Cashfree Client ID (first 5 chars):', process.env.CASHFREE_CLIENT_ID ? process.env.CASHFREE_CLIENT_ID.substring(0, 5) : 'Not loaded');
 });
