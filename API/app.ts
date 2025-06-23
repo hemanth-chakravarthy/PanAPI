@@ -7,6 +7,7 @@ import uploadRoutes from './routes/uploadRoutes.js';
 import path from 'path';
 import connectDB from './config/db.js';
 import shopRoutes from './routes/route.js';
+import bankRoutes from './routes/bank.route.js';
 
 const app: Application = express();
 
@@ -25,6 +26,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api', uploadRoutes);
 app.use('/api', shopRoutes);
 app.use('/api/aadhaar', aadhaarRoutes); 
+app.use('/api/bank-verification', bankRoutes);
 
 
 // Test route
