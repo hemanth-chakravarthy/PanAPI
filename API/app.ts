@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import path from 'path';
 import panRoutes from './routes/pan.route';
-
+import SellerRoutes from './routes/Seller.routes';
 import SellerRegistrationRoutes from './routes/SellerRegistration.routes';
 import route from './routes/route';
 import aadhaarRoutes from './routes/aadhaarRoutes';
@@ -30,9 +30,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use((req, res, next) => {
+  console.log(`[${req.method}] ${req.url}`);
+  next();
+});
+
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+app.use('/api/seller', SellerRoutes);
 app.use('/api/register', SellerRegistrationRoutes);
 app.use('/api', route);
 app.use('/api', uploadRoutes);
