@@ -2,6 +2,7 @@ import express, { Router } from 'express';
 import multer, { StorageEngine } from 'multer';
 import { addShopDetails, gstVerification } from '../controllers/controller';
 import { uploadFssaiData } from '../controllers/fssaiController';
+import { authenticate } from '../middlewares/Auth.middleware';
 
 const router: Router = express.Router();
 
@@ -17,7 +18,7 @@ const storage: StorageEngine = multer.diskStorage({
 const upload = multer({ storage });
 
 router.post(
-  '/shop',
+  '/shop', authenticate,
   upload.fields([
     { name: 'logo', maxCount: 1 },
     { name: 'banner', maxCount: 1 },

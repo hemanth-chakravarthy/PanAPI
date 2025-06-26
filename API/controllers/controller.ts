@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import Seller from '../models/Seller.model';
 import Shop, { IShop } from '../models/data';
 import { verifyGstinWithCashfree } from '../services/verifygstService';
 import { formatGstDetails } from '../utils/gstFormatter';
@@ -19,6 +20,15 @@ interface ShopRequestBody {
 
 // Shop details controller
 export const addShopDetails = async (req: Request, res: Response): Promise<void> => {
+  
+  const sellerId = req.user;
+  console.log('Seller ID from request:', sellerId);
+
+  if(!sellerId){
+    res.status(400).json({ error: 'invalid session' });
+    return;
+  }
+
   try {
     const {
       businessName,
@@ -36,6 +46,7 @@ export const addShopDetails = async (req: Request, res: Response): Promise<void>
     const files = req.files as { [fieldname: string]: Express.Multer.File[] } | undefined;
 
     const shop: IShop = new Shop({
+      seller: sellerId, // Assuming sellerId is an object with _id property
       businessName,
       businessAddress: {
         pincode,
@@ -53,6 +64,7 @@ export const addShopDetails = async (req: Request, res: Response): Promise<void>
     });
 
     await shop.save();
+
     res.status(201).json({ message: 'Shop details saved successfully', shop });
   } catch (error) {
     console.error(error);
