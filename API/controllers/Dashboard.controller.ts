@@ -1,88 +1,49 @@
 import { Request, Response } from 'express';
-import CompanyDetail from '../models/CompanyDetails.model';
+import Seller from '../models/Seller.model';
 
 export const getDashboardData = async (req: Request, res: Response) => {
   try {
-    const sellers = await CompanyDetail.aggregate([
-      {
-        $lookup: {
-          from: 'pans',
-          localField: '_id',
-          foreignField: 'sellerId',
-          as: 'panDetails',
-        },
-      },
-      { $addFields: { panDetails: { $arrayElemAt: ['$panDetails', 0] } } },
+    const sellers = await Seller.find()
+      .populate('panId')
+      .populate('aadharId')
+      .populate('fssaiId')
+      .populate('gstId')
+      .populate('bankId')
+      .populate('CompanyDetailId')
+      .sort({ createdAt: -1 });
 
-      {
-        $lookup: {
-          from: 'aadhars',
-          localField: '_id',
-          foreignField: 'sellerId',
-          as: 'aadharDetails',
-        },
-      },
-      { $addFields: { aadharDetails: { $arrayElemAt: ['$aadharDetails', 0] } } },
+    const formattedData = sellers.map((seller: any) => {
+      const panDetails = seller.panId || {};
+      const aadharDetails = seller.aadharId || {};
+      const fssaiDetails = seller.fssaiId || {};
+      const gstDetails = seller.gstId || {};
+      const bankDetails = seller.bankId || {};
+      const companyDetails = seller.CompanyDetailId || {};
 
-      {
-        $lookup: {
-          from: 'fssais',
-          localField: '_id',
-          foreignField: 'sellerId',
-          as: 'fssaiDetails',
-        },
-      },
-      { $addFields: { fssaiDetails: { $arrayElemAt: ['$fssaiDetails', 0] } } },
-
-      {
-        $lookup: {
-          from: 'gstdetails',
-          localField: '_id',
-          foreignField: 'sellerId',
-          as: 'gstDetails',
-        },
-      },
-      { $addFields: { gstDetails: { $arrayElemAt: ['$gstDetails', 0] } } },
-
-      {
-        $lookup: {
-          from: 'bankdetails',
-          localField: '_id',
-          foreignField: 'sellerId',
-          as: 'bankDetails',
-        },
-      },
-      { $addFields: { bankDetails: { $arrayElemAt: ['$bankDetails', 0] } } },
-
-      { $sort: { createdAt: -1 } },
-    ]);
-
-
-    const formattedData = sellers.map(seller => {
-      const businessType = seller?.panDetails?.panType || '';
+      const businessType = panDetails.panType || '';
       const isLLPOrPvtLtd = ['LLP', 'PVT LTD', 'PRIVATE LIMITED'].includes(businessType.toUpperCase());
 
       return {
-        name: isLLPOrPvtLtd ? seller?.panDetails?.nameOnCard || '' : seller?.panDetails?.name || '',
-        mobileNumber: seller?.officeContactNumber || '',
-        emailId: seller?.email || '',
+        name: isLLPOrPvtLtd ? panDetails.nameOnCard || '' : panDetails.name || '',
+        mobileNumber: seller.mobile || '',
+        emailId: seller.email || '',
         businessType: businessType || '',
-        panNumber: seller?.panDetails?.pan || '',
-        aadharNumber: seller?.aadharDetails?.aadharNumber || '',
-        fssaiNumber: seller?.fssaiDetails?.fssaiNumber || '',
-        gstNumber: seller?.gstDetails?.gstNumber || '',
-        bankAccountNumber: seller?.bankDetails?.accountNumber || '',
-        ifsc: seller?.bankDetails?.ifsc || '',
-        incorporationNumber: isLLPOrPvtLtd ? seller?.panDetails?.referenceId || '' : 'NILL',
+        panNumber: panDetails.pan || '',
+        aadharNumber: aadharDetails?.aadhaarNumber || '',
+        fssaiNumber: fssaiDetails?.fssaiNumber || '',
+        gstNumber: gstDetails?.gstNumber || '',
+        bankAccountNumber: bankDetails?.accountNumber || '',
+        ifsc: bankDetails?.ifsc || '',
+        incorporationNumber: isLLPOrPvtLtd ? panDetails?.referenceId || '' : 'NILL',
         showIncorporationCertificateButton: isLLPOrPvtLtd,
-        businessName: seller?.businessName || '',
-        pincode: seller?.address?.pincode || '',
-        state: seller?.address?.state || '',
-        district: seller?.address?.district || '',
-        mandal: seller?.address?.city || '', // Assuming mandal = city (adjust if needed)
-        village: seller?.address?.village || '',
-        landmark: seller?.address?.landmark || '',
-        doorNumber: seller?.address?.doorNumber || '',
+        businessName: companyDetails?.businessName || '',
+        pincode: companyDetails?.address?.pincode || '',
+        state: companyDetails?.address?.state || '',
+        district: companyDetails?.address?.district || '',
+        mandal: companyDetails?.address?.city || '',
+        village: companyDetails?.address?.village || '',
+        landmark: companyDetails?.address?.landmark || '',
+        doorNumber: companyDetails?.address?.doorNumber || '',
       };
     });
 
