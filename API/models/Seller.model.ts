@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
 
 const SellerSchema = new mongoose.Schema({
+  sellerId: {
+    type: String,
+    required: true,
+    unique: true
+  },
   name: String,
   email: {
     type: String,
@@ -10,7 +15,8 @@ const SellerSchema = new mongoose.Schema({
   mobile: {
     type: String,
     required: true,
-    match: /^\d{10}$/
+    match: /^\d{10}$/,
+    unique: true
   },
   businessType: {
     type: String,
