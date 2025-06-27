@@ -3,15 +3,20 @@ import { Request, Response, NextFunction } from 'express';
 // import DocumentUploadService from '../services/documentUploadService'; // You might not need this import if you remove all Cashfree interactions
 import DocumentModel from '../models/documentModel';
 import fs from 'fs/promises'; // Import fs for file deletion if needed
+import SellerModel from '../models/Seller.model';
 
 export const uploadSupportingDocumentToCashfree = async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const sellerId = req.user?.id; // Assuming sellerId is stored in req.user
+        if (!sellerId) {
+            return res.status(400).json({ success: false, message: 'Invalid session. Seller ID is required.' });
+        }
         if (!req.file) {
             return res.status(400).json({ success: false, message: 'No file uploaded.' });
         }
 
         const { originalname, mimetype, size, path } = req.file;
-        const { sellerId, documentType } = req.body;
+        const { documentType } = req.body;
 
         if (!sellerId || !documentType) {
             // You might want to delete the temporarily uploaded file here if these are missing
@@ -35,6 +40,9 @@ export const uploadSupportingDocumentToCashfree = async (req: Request, res: Resp
         });
 
         const savedDocument = await newDocument.save();
+        await SellerModel.findByIdAndUpdate(sellerId, {
+            documentUploadId: savedDocument._id // Update the seller's documentUploadId to point to the new document
+        });
         console.log('Document saved to DB (on server):', savedDocument);
 
         // --- REMOVE THE CASHFREE API CALL AND RELATED DB UPDATE ---

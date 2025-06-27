@@ -47,6 +47,10 @@ const SellerSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Verification',
   },
+  documentUploadId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'DocumentUpload',
+  },
   createdAt: {
     type: Date,
     default: Date.now
