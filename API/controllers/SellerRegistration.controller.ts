@@ -1,8 +1,15 @@
 import { NextFunction, Request, Response } from "express";
 import CompanyDetail from "../models/CompanyDetails.model";
+import SellerModel from "../models/Seller.model";
 
 export const setCompanyDetails = async (req: Request, res: Response, next: NextFunction )=> {
   try {
+    const sellerId = req.user?._id;
+    if (!sellerId) {
+      res.status(400).json({ message: "Seller ID is required" });
+      return;
+    }
+    
     const {
       businessName,
       pincode,
@@ -45,6 +52,7 @@ export const setCompanyDetails = async (req: Request, res: Response, next: NextF
     const banner = (req.files as any)?.banner?.[0]?.path;
 
     const business = await CompanyDetail.create({
+      sellerId: sellerId,
       businessName: businessName,
       address: { pincode, doorNumber, landmark, village, city, district, state },
       sameAsBusinessAddress,
@@ -52,6 +60,9 @@ export const setCompanyDetails = async (req: Request, res: Response, next: NextF
       website,
       logoUrl: logo,
       bannerUrl: banner,
+    });
+    await SellerModel.findByIdAndUpdate(sellerId, {
+      CompanyDetailId: business._id,
     });
 
     res.status(201).json({ message: "Business created", business });

@@ -51,6 +51,10 @@ const SellerSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'DocumentUpload',
   },
+  CompanyDetailId:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'CompanyDetail',
+  },
   createdAt: {
     type: Date,
     default: Date.now
