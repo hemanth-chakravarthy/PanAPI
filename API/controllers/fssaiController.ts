@@ -1,26 +1,46 @@
 import { Request, Response } from 'express';
-import { Fssai } from '../models/fssaiModel';
+import Fssai from '../models/fssaiModel'; 
+import SellerModel from '../models/Seller.model';
 
 export const uploadFssaiData = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { fssaiNumber } = req.body;
-    const file = req.file as Express.Multer.File;
-
-    if (!fssaiNumber || !file) {
-      res.status(400).json({ message: 'FSSAI number or document is missing' });
+    const sellerId = req.user?.id;
+    if (!sellerId) {
+      res.status(401).json({ message: 'Unauthorized' });
       return;
     }
 
+    const { fssaiNumber } = req.body;
+
+    if (!fssaiNumber || !/^\d{14}$/.test(fssaiNumber)) {
+      res.status(400).json({ message: 'Invalid or missing FSSAI number' });
+      return;
+    }
+
+    const file = req.file; // 👈 using req.file for single file uploads
+
+    if (!file) {
+      res.status(400).json({ message: 'FSSAI document file is missing' });
+      return;
+    }
+
+    const documentPath = file.filename;
+
     const newEntry = new Fssai({
+      sellerId,
       fssaiNumber,
-      documentPath: file.path,
+      documentPath
     });
 
     await newEntry.save();
 
+    await SellerModel.findByIdAndUpdate(sellerId, {
+      fssaiId: newEntry._id,
+    });
+
     res.status(201).json({ message: 'Uploaded successfully', data: newEntry });
-  } catch (error) {
-    console.error('Upload error:', error);
-    res.status(500).json({ error: 'Something went wrong' });
+  } catch (error: any) {
+    console.error('Upload error:', error.message, error.stack);
+    res.status(500).json({ error: error.message || 'Something went wrong' });
   }
 };

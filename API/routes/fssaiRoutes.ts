@@ -1,20 +1,25 @@
 import express from 'express';
-import multer from 'multer';
-import { uploadFssaiData } from '../controllers/fssaiController.js';
+import multer, { StorageEngine } from 'multer';
+import { uploadFssaiData } from '../controllers/fssaiController';
+import { authenticate } from '../middlewares/Auth.middleware';
 
 const fssaiRouter = express.Router();
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
+const storage: StorageEngine = multer.diskStorage({
+  destination: (_req, _file, cb) => {
     cb(null, 'uploads/');
   },
-  filename: (req, file, cb) => {
+  filename: (_req, file, cb) => {
     cb(null, `${Date.now()}-${file.originalname}`);
-  },
+  }
 });
 
 const upload = multer({ storage });
 
-fssaiRouter.post('/upload', upload.single('document'), uploadFssaiData);
+fssaiRouter.post(
+  '/upload', authenticate,
+  upload.single('fssaiDocument'),
+  uploadFssaiData
+);
 
 export default fssaiRouter;

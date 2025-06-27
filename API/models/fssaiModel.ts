@@ -1,6 +1,10 @@
 import mongoose from 'mongoose';
 
 const fssaiSchema = new mongoose.Schema({
+  sellerId:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Seller',
+  },
   fssaiNumber: {
     type: String,
     required: true,
@@ -11,4 +15,4 @@ const fssaiSchema = new mongoose.Schema({
   },
 });
 
-export const Fssai = mongoose.model('Fssai', fssaiSchema);
+export default mongoose.model('Fssai', fssaiSchema);
