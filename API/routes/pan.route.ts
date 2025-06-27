@@ -5,10 +5,12 @@ import bulkVerifyPan from '../controllers/bulkVerifyPanController';
 import getBulkPanStatus from '../controllers/getBulkPanStatusController';
 import verifyPanLite from '../controllers/verifyPanLiteController';
 import verifyPan360 from '../controllers/verifyPan360Controller';
+import { authenticate } from '../middlewares/Auth.middleware';
 
 const router = Router();
 
-router.route('/verify').post(verifyPanSync);
+// router.route('/verify').post(verifyPanSync);
+router.post('/verify',authenticate, verifyPanSync)
 router.route('/status/:referenceId').get(getPanStatus);
 router.route('/bulk-verify').post(bulkVerifyPan);
 router.route('/bulk-status').get(getBulkPanStatus);

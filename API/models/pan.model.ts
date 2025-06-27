@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document, model } from 'mongoose';
 
 export interface PanData {
+  sellerId: mongoose.Types.ObjectId; 
   pan: string;
   name: string;
   panType: string;
@@ -15,7 +16,6 @@ export interface PanData {
   nameOnCard: string;
   lastUpdated: string;
   fetchedAt: Date;
-  sellerId: mongoose.Types.ObjectId; 
 }
 
 export interface IPan extends Document, PanData {}
@@ -35,7 +35,6 @@ const PanSchema = new Schema<IPan>({
   nameOnCard: { type: String },
   lastUpdated: { type: String },
   fetchedAt: { type: Date, default: Date.now },
-
   sellerId: {
     type: Schema.Types.ObjectId,
     ref: 'CompanyDetail',

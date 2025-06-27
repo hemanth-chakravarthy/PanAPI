@@ -24,7 +24,12 @@ const SellerSchema = new mongoose.Schema({
     required: true
   },
   shopID: {
-    type: String
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Shop',
+  },
+  panId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'PAN',
   },
   createdAt: {
     type: Date,

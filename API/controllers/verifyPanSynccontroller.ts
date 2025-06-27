@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
 import * as dotenv from 'dotenv';
-import PAN from '../models/pan.model'; //route
+import PAN, { PanData } from '../models/pan.model'; //route
+import SellerModel from '../models/Seller.model';
 
 dotenv.config();
 
@@ -25,6 +26,15 @@ interface CashfreeResponse {
 
 const verifyPanSync = async (req: Request, res: Response) => {
   try {
+
+    const sellerID = req.user?.id;
+    console.log('Seller ID from request:', sellerID);
+    
+    if (!sellerID) {
+      res.status(400).json({ error: 'Invalid session' });
+      return;
+    }
+
     const { pan, name } = req.body;
 
     if (!pan || !name) {
@@ -47,7 +57,9 @@ const verifyPanSync = async (req: Request, res: Response) => {
       { headers }
     );
 
-    const d = response.data;
+    const d= response.data;
+    console.log('PAN verification response:', d);
+
 
     if (!d.valid || d.pan_status !== 'VALID') {
       res.status(400).json({
@@ -56,10 +68,36 @@ const verifyPanSync = async (req: Request, res: Response) => {
       });
       return;
     }
+    const panData: PanData = {
+      sellerId: sellerID, // Assuming sellerID is a valid ObjectId
+      pan: d.pan,
+      name: d.registered_name,
+      panType: d.type,
+      referenceId: d.reference_id.toString(),
+      status: d.valid ? 'VALID' : 'INVALID',
+      nameProvided: d.name_provided,
+      nameMatchScore: d.name_match_score,
+      nameMatchResult: d.name_match_result,
+      aadhaarStatus: d.aadhaar_seeding_status,
+      aadhaarStatusDesc: d.aadhaar_seeding_status_desc,
+      fatherName: d.father_name || '',
+      nameOnCard: d.name_pan_card || '',
+      lastUpdated: d.last_updated_at,
+      fetchedAt: new Date(),
+    };
 
-    await PAN.findOneAndUpdate({ pan: d.pan }, d, { upsert: true });
+    const panDoc = await PAN.findOneAndUpdate(
+      { pan: panData.pan },
+      { $set: panData },
+      { upsert: true, new: true }
+    );
+    
+    await SellerModel.findByIdAndUpdate(sellerID,{
+      panId: panDoc._id
+    })
 
     res.status(200).json({
+      sellerID: sellerID,
       pan: d.pan,
       type: d.type,
       reference_id: d.reference_id,
@@ -74,8 +112,8 @@ const verifyPanSync = async (req: Request, res: Response) => {
       name_pan_card: d.name_pan_card,
       pan_status: d.pan_status,
       aadhaar_seeding_status_desc: d.aadhaar_seeding_status_desc
-    });
-    return;
+    })
+    return
 
   } catch (err: any) {
     console.error('PAN verification error:', err.message);
