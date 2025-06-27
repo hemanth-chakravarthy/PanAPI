@@ -27,7 +27,7 @@ router.post(
   addShopDetails
 );
 
-router.post('/gstin', gstVerification);
+router.post('/gstin',authenticate, gstVerification);
 
 router.post('/upload', upload.single('document'), uploadFssaiData);
 

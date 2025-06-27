@@ -80,7 +80,12 @@ export const addShopDetails = async (req: Request, res: Response): Promise<void>
 
 // GST verification controller
 export const gstVerification = async (req: Request, res: Response): Promise<void> => {
-  const { gstin, sellerId } = req.body;
+  const sellerId = req.user?.id;
+  if (!sellerId) {
+    res.status(400).send({ error: 'Invalid session' });
+    return;
+  }
+  const { gstin } = req.body;
 
   if (!gstin || !sellerId) {
     res.status(400).send({ error: 'GSTIN and Seller ID are required' });
@@ -107,7 +112,10 @@ export const gstVerification = async (req: Request, res: Response): Promise<void
     });
 
     if (gstDocument.status === 'Active') {
-      await gstDocument.save();
+      const GSTDoc = await gstDocument.save();
+      await Seller.findByIdAndUpdate(sellerId, {
+        gstId: GSTDoc._id
+      });
       res.status(201).json({
         message: 'GSTIN verified successfully',
         data: {

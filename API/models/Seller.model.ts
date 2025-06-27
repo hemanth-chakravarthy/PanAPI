@@ -39,6 +39,10 @@ const SellerSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Fssai',
   },
+  gstId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'GSTDetails',
+  },
   createdAt: {
     type: Date,
     default: Date.now
