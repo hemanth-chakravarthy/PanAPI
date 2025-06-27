@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import Seller from '../models/Seller.model';
-import Shop, { IShop } from '../models/data';
+import Shop, { IShop } from '../models/ShopDetails.model';
 import { verifyGstinWithCashfree } from '../services/verifygstService';
 import { formatGstDetails } from '../utils/gstFormatter';
 import GSTDetails from '../models/GSTDetails';
@@ -21,7 +21,7 @@ interface ShopRequestBody {
 // Shop details controller
 export const addShopDetails = async (req: Request, res: Response): Promise<void> => {
   
-  const sellerId = req.user;
+  const sellerId = req.user?.id;
   console.log('Seller ID from request:', sellerId);
 
   if(!sellerId){
@@ -64,6 +64,12 @@ export const addShopDetails = async (req: Request, res: Response): Promise<void>
     });
 
     await shop.save();
+
+    // Update the Seller model with shopID
+    await Seller.findByIdAndUpdate(sellerId, {
+      shopID: shop._id // Assuming shop._id is the ObjectId of the Shop
+    });
+
 
     res.status(201).json({ message: 'Shop details saved successfully', shop });
   } catch (error) {

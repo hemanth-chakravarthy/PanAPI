@@ -23,6 +23,9 @@ const SellerSchema = new mongoose.Schema({
     enum: ['shop', 'individual', 'proprietor', 'partnership', 'llp', 'pvt.ltd'],
     required: true
   },
+  shopID: {
+    type: String
+  },
   createdAt: {
     type: Date,
     default: Date.now
