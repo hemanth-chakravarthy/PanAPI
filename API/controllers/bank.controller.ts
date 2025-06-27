@@ -1,8 +1,13 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
 import Verification from '../models/bank.model';
+import SellerModel from '../models/Seller.model';
 
 export const handleBankAccount = async (req: Request, res: Response) => {
+  const sellerId = req.user?.id;
+  if (!sellerId) {
+    return res.status(400).json({ error: 'Invalid session' });
+  }
   const { bankAccount, ifsc, phone, userId } = req.body;
 
   try {
@@ -49,6 +54,7 @@ export const handleBankAccount = async (req: Request, res: Response) => {
 
     if (result.status === 'SUCCESS') {
       const saved = await Verification.create({
+        sellerId,
         name: data.name_on_account,
         bankAccount,
         ifsc,
@@ -56,9 +62,11 @@ export const handleBankAccount = async (req: Request, res: Response) => {
         branch: data.branch,
         city: data.city,
         phone,
-        userId,
         status: 'VERIFIED',
       });
+      await SellerModel.findByIdAndUpdate(sellerId, {
+        bankId: saved._id
+      })
 
       return res.status(201).json({
         // message: 'Verified and saved successfully',

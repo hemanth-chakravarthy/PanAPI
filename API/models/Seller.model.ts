@@ -43,6 +43,10 @@ const SellerSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'GSTDetails',
   },
+  bankId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Verification',
+  },
   createdAt: {
     type: Date,
     default: Date.now

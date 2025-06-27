@@ -1,6 +1,10 @@
 import mongoose from 'mongoose';
 
 const VerificationSchema = new mongoose.Schema({
+  sellerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Seller',
+  },
   name: String,
   bankAccount: { type: String, required: true },
   ifsc: { type: String, required: true },
@@ -8,7 +12,6 @@ const VerificationSchema = new mongoose.Schema({
   branch: String,
   city: String,
   phone: String,
-  userId: String,
   status: { type: String, default: 'PENDING' },
   reason: String,
   createdAt: { type: Date, default: Date.now },
