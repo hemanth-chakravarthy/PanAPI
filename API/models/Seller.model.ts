@@ -31,6 +31,10 @@ const SellerSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'PAN',
   },
+  aadharId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'AadhaarUser',
+  },
   createdAt: {
     type: Date,
     default: Date.now
