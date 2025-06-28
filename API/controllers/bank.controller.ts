@@ -6,7 +6,8 @@ import SellerModel from '../models/Seller.model';
 export const handleBankAccount = async (req: Request, res: Response) => {
   const sellerId = req.user?.id;
   if (!sellerId) {
-    return res.status(400).json({ error: 'Invalid session' });
+    res.status(400).json({ error: 'Invalid session' });
+    return
   }
   const { bankAccount, ifsc, phone, userId } = req.body;
 
@@ -14,10 +15,11 @@ export const handleBankAccount = async (req: Request, res: Response) => {
     // 1. Check if record exists
     const existing = await Verification.findOne({ bankAccount, ifsc });
     if (existing) {
-      return res.status(200).json({
+      res.status(200).json({
        
         formatted: `Account already exists with Phone Number: ${existing.phone}`,
       });
+      return
     }
 
     // 2. Authenticate with Cashfree
@@ -68,14 +70,16 @@ export const handleBankAccount = async (req: Request, res: Response) => {
         bankId: saved._id
       })
 
-      return res.status(201).json({
+      res.status(201).json({
         // message: 'Verified and saved successfully',
         formatted: `Holder Name: ${saved.name}\nBank Name: ${saved.bankName}\nAccount Number: ${saved.bankAccount}\nIFSC Code: ${saved.ifsc}\nCity: ${saved.city}\nBranch: ${saved.branch}`,
       });
+      return 
     }
 
     // 4. Save failed attempt
     await Verification.create({
+      sellerId,
       bankAccount,
       ifsc,
       phone,
@@ -84,10 +88,11 @@ export const handleBankAccount = async (req: Request, res: Response) => {
       reason: result.message,
     });
 
-    return res.status(400).json({
+    res.status(400).json({
       message: 'Verification failed',
       reason: result.message,
     });
+    return 
 
   } catch (err) {
     console.error('Verification Error:', err);
