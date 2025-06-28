@@ -12,6 +12,7 @@ import uploadRoutes from './routes/uploadRoutes';
 import shopRoutes from './routes/route';
 import bankRoutes from './routes/bank.route';
 import fssaiRouter from './routes/fssaiRoutes';
+import Dashboard from './routes/Dashboard.routes';
 
 import { errorHandler } from './middlewares/errorHandler.middleware';
 
@@ -48,6 +49,7 @@ app.use('/api/aadhaar', aadhaarRoutes);
 app.use('/api/fssai', fssaiRouter);
 app.use('/api/bank-verification', bankRoutes);
 app.use('/api/pan', panRoutes);
+app.use('/api/dashboard', Dashboard);
 
 app.get('/api/test', (req: Request, res: Response) => {
   res.json({ message: 'This is a test' });
