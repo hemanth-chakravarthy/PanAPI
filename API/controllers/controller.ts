@@ -22,7 +22,6 @@ interface ShopRequestBody {
 export const addShopDetails = async (req: Request, res: Response): Promise<void> => {
   
   const sellerId = req.user?.id;
-  console.log('Seller ID from request:', sellerId);
 
   if(!sellerId){
     res.status(400).json({ error: 'invalid session' });

@@ -17,7 +17,6 @@ export const handleVerifyOTP = async (req: Request, res: Response) => {
   const { otp, ref_id } = req.body;
   try {
     const sellerId = req.user?.id; // Assuming user ID is stored in req.user
-    console.log(`Seller ID from request: ${sellerId}`);
     
     if (!sellerId) {
       res.status(400).json({ error: 'Seller ID is required' });
