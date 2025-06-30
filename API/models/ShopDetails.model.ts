@@ -13,6 +13,7 @@ export interface IBusinessAddress {
 
 // Define the interface for the Shop document
 export interface IShop extends Document {
+  seller: mongoose.Types.ObjectId;
   businessName: string;
   businessAddress: IBusinessAddress;
   pickupAddressSame: boolean;
@@ -24,6 +25,11 @@ export interface IShop extends Document {
 }
 
 const ShopSchema = new Schema<IShop>({
+  seller: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Seller',
+    required: true
+  },
   businessName: { type: String, required: true },
   businessAddress: {
     pincode: { type: String, required: true },

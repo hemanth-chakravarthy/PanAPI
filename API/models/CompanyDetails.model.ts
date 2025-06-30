@@ -13,6 +13,7 @@ const addressSchema = new mongoose.Schema({
 
 const CompanyDetailsSchema = new mongoose.Schema(
   {
+    sellerId: { type: mongoose.Schema.Types.ObjectId, ref: "Seller"},
     businessName: { type: String, required: true },
     address: addressSchema,
     sameAsBusinessAddress: { type: Boolean, default: false },

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import Shop, { IShop } from '../models/data';
+import Seller from '../models/Seller.model';
+import Shop, { IShop } from '../models/ShopDetails.model';
 import { verifyGstinWithCashfree } from '../services/verifygstService';
 import { formatGstDetails } from '../utils/gstFormatter';
 import GSTDetails from '../models/GSTDetails';
@@ -19,6 +20,14 @@ interface ShopRequestBody {
 
 // Shop details controller
 export const addShopDetails = async (req: Request, res: Response): Promise<void> => {
+  
+  const sellerId = req.user?.id;
+
+  if(!sellerId){
+    res.status(400).json({ error: 'invalid session' });
+    return;
+  }
+
   try {
     const {
       businessName,
@@ -36,6 +45,7 @@ export const addShopDetails = async (req: Request, res: Response): Promise<void>
     const files = req.files as { [fieldname: string]: Express.Multer.File[] } | undefined;
 
     const shop: IShop = new Shop({
+      seller: sellerId, // Assuming sellerId is an object with _id property
       businessName,
       businessAddress: {
         pincode,
@@ -53,6 +63,13 @@ export const addShopDetails = async (req: Request, res: Response): Promise<void>
     });
 
     await shop.save();
+
+    // Update the Seller model with shopID
+    await Seller.findByIdAndUpdate(sellerId, {
+      shopID: shop._id // Assuming shop._id is the ObjectId of the Shop
+    });
+
+
     res.status(201).json({ message: 'Shop details saved successfully', shop });
   } catch (error) {
     console.error(error);
@@ -62,7 +79,12 @@ export const addShopDetails = async (req: Request, res: Response): Promise<void>
 
 // GST verification controller
 export const gstVerification = async (req: Request, res: Response): Promise<void> => {
-  const { gstin, sellerId } = req.body;
+  const sellerId = req.user?.id;
+  if (!sellerId) {
+    res.status(400).send({ error: 'Invalid session' });
+    return;
+  }
+  const { gstin } = req.body;
 
   if (!gstin || !sellerId) {
     res.status(400).send({ error: 'GSTIN and Seller ID are required' });
@@ -89,7 +111,10 @@ export const gstVerification = async (req: Request, res: Response): Promise<void
     });
 
     if (gstDocument.status === 'Active') {
-      await gstDocument.save();
+      const GSTDoc = await gstDocument.save();
+      await Seller.findByIdAndUpdate(sellerId, {
+        gstId: GSTDoc._id
+      });
       res.status(201).json({
         message: 'GSTIN verified successfully',
         data: {

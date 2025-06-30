@@ -4,6 +4,7 @@ import { Router } from 'express';
 import multer from 'multer';
 import { uploadSupportingDocumentToCashfree } from '../controllers/documentUploadController';
 import asyncHandler from '../utils/asyncHandler'; // Import the new async handler utility
+import { authenticate } from '../middlewares/Auth.middleware';
 
 const router = Router();
 
@@ -20,6 +21,6 @@ const upload = multer({
 }).single('document');
 
 // Wrap your async controller function with asyncHandler
-router.post('/upload-cashfree-document', upload, asyncHandler(uploadSupportingDocumentToCashfree));
+router.post('/upload-cashfree-document', authenticate, upload, asyncHandler(uploadSupportingDocumentToCashfree));
 
 export default router;
