@@ -28,7 +28,7 @@ const verifyPanSync = async (req: Request, res: Response) => {
   try {
 
     const sellerID = req.user?.id;
-    console.log('Seller ID from request:', sellerID);
+    // console.log('Seller ID from request:', sellerID);
     
     if (!sellerID) {
       res.status(400).json({ error: 'Invalid session' });

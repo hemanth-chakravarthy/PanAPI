@@ -52,6 +52,7 @@ export default function StoreDetails() {
     return uri?.split("/").pop();
   };
 
+
   const handleSubmit = async () => {
     try {
       const token = await getToken();
