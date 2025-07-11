@@ -38,6 +38,8 @@ import BusinessDetails from "../Business_details/BusinessDetails";
 // import AadhaarVerification from "../company/AadhaarVerification";
 // import AuthorizedPersonDetails from "../company/AuthorizedPersonDetials";
  import BusinessDetailsScreen from "../company/Business_details";
+import { storeToken } from "../utils/storage";
+import api from "../utils/api";
 
 export default function SellerRegistration() {
   // Registration form states
@@ -144,23 +146,64 @@ export default function SellerRegistration() {
   };
 
   const handleSubmit = () => {
-    setMobileNumber(phone);
-    setShowOTPScreen(true);
-    // Save initial form data
-    setFormData({
-      ...formData,
-      email,
-      phone,
-      name,
-      businessType
-    });
-  };
+  if (!email.trim() || !phone.trim() || !name.trim()) {
+    alert("Please fill all the fields");
+    return;
+  }
 
-  const handleOTPVerification = () => {
-    console.log("Verifying OTP:", otp);
-    setShowOTPScreen(false);
-    setCurrentPage(1);
-  };
+  if (!/^\d{10}$/.test(phone)) {
+    alert("Enter a valid 10-digit phone number");
+    return;
+  }
+
+  if (!/^\S+@\S+\.\S+$/.test(email)) {
+    alert("Enter a valid email address");
+    return;
+  }
+
+  // If all valid
+  setMobileNumber(phone);
+  setShowOTPScreen(true);
+  setFormData({
+    ...formData,
+    email,
+    phone,
+    name,
+    businessType
+  });
+};
+
+
+  const handleOTPVerification = async () => {
+    const otpValue = otp.join("");
+
+    if (otpValue.length < 6 || otp.some((d) => d.trim() === "")) {
+      alert("Please enter a valid 6-digit OTP");
+      return;
+    }
+
+    try {
+      const response = await api.post('/api/Seller/createAccount', {
+        name: formData.name,
+        email: formData.email,
+        mobile: formData.phone,
+        businessType: formData.businessType,
+      });
+
+      const token = response.data.token;
+      await storeToken(token);
+
+      // console.log("Token stored successfully:", token);
+
+      setShowOTPScreen(false);
+      setCurrentPage(1);
+      console.log("✅ User created and token stored");
+    } catch (error: any) {
+      console.error("❌ Error creating seller:", error.response?.data || error.message);
+      alert(error.response?.data?.error || "Something went wrong during registration.");
+    }
+};
+
 
   const handleNextPage = () => {
     if (currentPage < pages.length) {
