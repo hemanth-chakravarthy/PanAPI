@@ -13,10 +13,10 @@ import {
 import { Stack, useRouter } from 'expo-router';
 import { Entypo } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import axios from 'axios';
 
 const PanDetailsScreen = () => {
   const router = useRouter();
+
   const [panNumber, setPanNumber] = useState('');
   const [nameOnPan, setNameOnPan] = useState('');
   const [isVerified, setIsVerified] = useState(false);
@@ -29,7 +29,8 @@ const PanDetailsScreen = () => {
   const handleVerify = async () => {
     const token = await getToken();
     if (!token) {
-      Alert.alert('authentication not found ');
+      Alert.alert('Authentication Error', 'User is not logged in.');
+      return;
     }
 
     if (!isValidPAN(panNumber)) {
@@ -38,35 +39,43 @@ const PanDetailsScreen = () => {
     }
 
     if (!nameOnPan) {
-      Alert.alert('Missing Name', 'Please enter the name as per PAN.');
+      Alert.alert('Missing Name', 'Please enter the name as per PAN card.');
       return;
     }
 
     try {
       setLoading(true);
-      const res = await api.post('/api/pan/verify', {
-        pan: panNumber,
-        name: nameOnPan,
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const res = await api.post(
+        '/api/pan/verify',
+        {
+          pan: panNumber,
+          name: nameOnPan,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       setPanInfo(res.data);
       setIsVerified(true);
-      setIsMatched(false); // Require manual confirmation
-      Alert.alert('Success', 'PAN verified successfully.');
+      setIsMatched(false);
+
+      Alert.alert('✅ Success', 'PAN Uploaded');
     } catch (err: any) {
       console.error('PAN verify error:', err.response?.data || err.message);
-      Alert.alert('Verification Failed', err.response?.data?.message || 'PAN verification failed.');
+      Alert.alert(
+        'Verification Failed',
+        err.response?.data?.message || 'PAN verification failed.'
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  // const canProceed = isVerified && isMatched && panInfo?.pan_status === 'VALID';
-  const canProceed = true; // Temporarily set to true for testing
+  const canProceed = isVerified && isMatched && panInfo?.pan_status === 'VALID';
+
   return (
     <>
       <Stack.Screen options={{ title: 'Step-2', headerTitleAlign: 'center' }} />
@@ -80,6 +89,8 @@ const PanDetailsScreen = () => {
             value={panNumber}
             onChangeText={(text) => setPanNumber(text.toUpperCase())}
             placeholder="ABCDE1234F"
+            maxLength={10}
+            autoCapitalize="characters"
           />
 
           <Text style={styles.label}>Name as per PAN</Text>
@@ -90,7 +101,11 @@ const PanDetailsScreen = () => {
             placeholder="Full Name"
           />
 
-          <TouchableOpacity style={styles.verifyButton} onPress={handleVerify} disabled={loading}>
+          <TouchableOpacity
+            style={styles.verifyButton}
+            onPress={handleVerify}
+            disabled={loading}
+          >
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
@@ -100,12 +115,20 @@ const PanDetailsScreen = () => {
 
           {isVerified && panInfo && (
             <View style={styles.panInfo}>
-              <Text><Text style={styles.bold}>PAN</Text>: {panInfo.pan}</Text>
-              <Text><Text style={styles.bold}>Name</Text>: {panInfo.registered_name}</Text>
-              <Text><Text style={styles.bold}>Type</Text>: {panInfo.type}</Text>
-              <Text><Text style={styles.bold}>Status</Text>: {panInfo.pan_status}</Text>
+              <Text>
+                <Text style={styles.bold}>PAN:</Text> {panInfo.pan}
+              </Text>
+              <Text>
+                <Text style={styles.bold}>Name:</Text> {panInfo.registered_name}
+              </Text>
+              <Text>
+                <Text style={styles.bold}>Type:</Text> {panInfo.type}
+              </Text>
+              <Text>
+                <Text style={styles.bold}>Status:</Text> {panInfo.pan_status}
+              </Text>
 
-              {/* Confirmation checkbox */}
+              {/* ✅ Confirmation checkbox */}
               <View style={styles.checkboxContainer}>
                 <TouchableOpacity
                   style={styles.customCheckbox}
@@ -134,8 +157,11 @@ const PanDetailsScreen = () => {
             { backgroundColor: canProceed ? '#1d4b96' : '#888' },
           ]}
           onPress={() => {
-            if (canProceed) router.push('/Business_details/aadhaarVerication');
-            else Alert.alert('Error', 'Please verify PAN and confirm match.');
+            if (canProceed) {
+              router.push('/Business_details/aadhaarVerication');
+            } else {
+              Alert.alert('Error', 'Please verify PAN and confirm match.');
+            }
           }}
           disabled={!canProceed}
         >
@@ -148,7 +174,6 @@ const PanDetailsScreen = () => {
 
 export default PanDetailsScreen;
 
-// Reuse your existing styles
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: 'white', padding: 20 },
   card: { backgroundColor: 'white', borderRadius: 8, padding: 20, elevation: 8 },

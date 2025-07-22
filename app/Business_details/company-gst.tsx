@@ -1,16 +1,59 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import CheckBox from 'expo-checkbox';
 import { useRouter } from 'expo-router';
+
+const API_BASE_URL = 'YOUR_BACKEND_API_BASE_URL'; // <<< IMPORTANT: Replace with your actual backend API base URL
 
 const CompanyGst = () => {
   const [gstNumber, setGstNumber] = useState('');
   const [selectedExemption, setSelectedExemption] = useState<string | null>(null);
   const [declarationChecked, setDeclarationChecked] = useState(false);
-    const router = useRouter();
+  const [isVerifying, setIsVerifying] = useState(false); // New state for loading indicator
+  const router = useRouter();
+
   const handleGSTChange = (text: string) => {
     const value = text.replace(/[^a-zA-Z0-9]/g, '').slice(0, 15); // Only alphanumerics, max 15
     setGstNumber(value);
+  };
+
+  const handleVerifyGst = async () => {
+    if (!gstNumber) {
+      Alert.alert('Input Required', 'Please enter a GST number to verify.');
+      return;
+    }
+
+    setIsVerifying(true);
+    try {
+      const response = await fetch(`${API_BASE_URL}/gstin`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer YOUR_AUTH_TOKEN`, // <<< IMPORTANT: Replace with your actual auth token
+        },
+        body: JSON.stringify({ gstin: gstNumber }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        if (result.message) {
+          Alert.alert('Success', result.message);
+        } else if (result.warning) {
+          Alert.alert('Warning', result.warning);
+        } else {
+          Alert.alert('Success', 'GSTIN verified successfully.');
+        }
+        // You might want to store verified data in state here, e.g., setVerifiedGstData(result.data);
+      } else {
+        Alert.alert('Error', result.error || 'Failed to verify GSTIN. Please try again.');
+      }
+    } catch (error) {
+      console.error('Network or API error:', error);
+      Alert.alert('Error', 'Could not connect to the server. Please check your network connection.');
+    } finally {
+      setIsVerifying(false);
+    }
   };
 
   const handleNext = () => {
@@ -38,10 +81,19 @@ const CompanyGst = () => {
             value={gstNumber}
             onChangeText={handleGSTChange}
             maxLength={15}
+            autoCapitalize="characters" // GSTIN is usually uppercase
           />
 
-          <TouchableOpacity style={styles.verifyButton}>
-            <Text style={styles.verifyButtonText}>Verify GST details</Text>
+          <TouchableOpacity 
+            style={styles.verifyButton} 
+            onPress={handleVerifyGst}
+            disabled={isVerifying} // Disable button while verifying
+          >
+            {isVerifying ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.verifyButtonText}>Verify GST details</Text>
+            )}
           </TouchableOpacity>
 
           <Text style={styles.subTitle}>GST mandatory unless exempt</Text>
