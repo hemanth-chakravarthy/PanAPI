@@ -3,9 +3,11 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import CheckBox from 'react-native-check-box';
 import { useRouter } from 'expo-router';
+import { getToken } from '../utils/storage'; 
+
 // import { RootStackParamList } from '../../types/navigation'; // Assuming this type is defined elsewhere
 
-const API_BASE_URL = 'YOUR_BACKEND_API_BASE_URL'; // <<< IMPORTANT: Replace with your actual backend API base URL
+const API_BASE_URL = 'http://localhost:5000/api'; // <<< IMPORTANT: Replace with your actual backend API base URL
 
 const Step4GstScreen: React.FC = () => {
   const router = useRouter();
@@ -24,6 +26,13 @@ const Step4GstScreen: React.FC = () => {
   );
 
   const handleVerifyGst = async () => {
+    const token = await getToken();
+
+    if (!token) {
+      Alert.alert('Error', 'You must be logged in to verify GST details');
+      return;
+    }
+
     if (!gstNumber) {
       Alert.alert('Input Required', 'Please enter a GST number to verify.');
       return;
@@ -35,7 +44,7 @@ const Step4GstScreen: React.FC = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer YOUR_AUTH_TOKEN`, 
+          'Authorization': `Bearer ${token}`, 
         },
         body: JSON.stringify({ gstin: gstNumber }),
       });
