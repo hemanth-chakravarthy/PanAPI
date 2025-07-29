@@ -193,7 +193,7 @@ export default function SellerRegistration() {
       const token = response.data.token;
       await storeToken(token);
 
-      // console.log("Token stored successfully:", token);
+      console.log("Token stored successfully:", token);
 
       setShowOTPScreen(false);
       setCurrentPage(1);

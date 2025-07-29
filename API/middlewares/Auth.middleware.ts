@@ -11,6 +11,7 @@ declare module 'express-serve-static-core' {
 export const authenticate = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) {
+    console.error('❌ Access token missing', token);
     res.status(401).json({ error: 'Access token missing' });
     return
   }
@@ -21,6 +22,7 @@ export const authenticate = (req: Request, res: Response, next: NextFunction) =>
     req.user = decoded;
     next();
   } catch {
+    console.error('❌ Invalid or expired token, on catch block');
     res.status(401).json({ error: 'Invalid or expired token' });
     return
   }

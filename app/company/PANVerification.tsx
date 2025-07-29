@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import CheckBox from 'react-native-check-box';
 import { useRouter } from 'expo-router';
+import { getToken } from '../utils/storage'; 
 
-const BACKEND_URL = 'https://localhost:5000/api/pan/verify'; 
+const BACKEND_URL = 'http://localhost:5000/api/pan/verify'; 
 
 const Step3PanScreen: React.FC = () => {
   const router = useRouter();
@@ -20,9 +21,18 @@ const Step3PanScreen: React.FC = () => {
     setPanDetails(null);
 
     try {
+      const token = await getToken();
+
+      if (!token) {
+        Alert.alert('Error', 'You must be logged in to verify PAN');
+        setLoading(false);
+        return;
+      }
+
       const response = await fetch(BACKEND_URL, {
         method: 'POST',
         headers: {
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({

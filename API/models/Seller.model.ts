@@ -20,7 +20,7 @@ const SellerSchema = new mongoose.Schema({
   },
   businessType: {
     type: String,
-    enum: ['shop', 'individual', 'proprietor', 'partnership', 'llp', 'pvt.ltd'],
+    enum: ['shop', 'individual', 'proprietor', 'partnership', 'llp', 'pvt.ltd', 'company'],
     required: true
   },
   shopID: {
